@@ -79,3 +79,7 @@ This log maintains the context of automated work performed within the `umbra` di
 - **Tmux Integration**:
     - Finalized the modularization of `tmux` as a standalone Git submodule.
     - Standalone repository established at `https://github.com/roydsouza/tmux`.
+
+- **Zsh Architect**:
+    - Standardized Zsh configuration and converted to a Git submodule (`https://github.com/roydsouza/zsh`).
+    - Established management files and standardized symlink documentation.
