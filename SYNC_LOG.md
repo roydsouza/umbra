@@ -70,3 +70,8 @@ This log maintains the context of automated work performed within the `umbra` di
 - **Yazi Architect**:
     - Converted `yazi` from a local directory to a formal Git submodule.
     - Standalone repository established at `https://github.com/roydsouza/yazi`.
+
+- **Tmux Orchestrator**:
+    - Standardized Tmux configuration with advanced AI-first workflows.
+    - Integrated Neovim and Yazi into the terminal multiplexing layer.
+    - Documented plugin management and symlinked to `~/.tmux.conf`.
