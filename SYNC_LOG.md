@@ -51,8 +51,13 @@ This log maintains the context of automated work performed within the `umbra` di
     - Redacted all sensitive `.onion` addresses and PII from public documentation.
     - Moved identity hostnames to the version-controlled-excluded `umbra/keys/` directory.
     - Created `umbra/keys/README.md` to document secure identity management.
+- **Wormhole & Neovim Consolidation**:
+    - Restructured Neovim configuration into a unified super-project submodule.
+    - Stabilized Neovim 0.11+ configuration by transitioning to native LSP APIs.
+    - Converted Ghostty configuration to a submodule for better portability.
 - **Status:**
     - C-Tor and Arti are configured to run simultaneously.
     - Identity keys are securely archived and marked by implementation.
     - Automated rituals are fully operational and referenced in [CONTENTS.md](CONTENTS.md).
     - Repository is hardened against accidental PII leaks.
+    - Neovim environment is error-free on 0.11.5.
