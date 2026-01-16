@@ -47,7 +47,12 @@ This log maintains the context of automated work performed within the `umbra` di
     - Codified the [Sync Ritual](.agent/workflows/sync.md) for all future sessions.
     - Protocol includes mandatory upstream software checks for `tor` and `arti`.
     - Integrated the ritual into the `MISSION.md` directives.
+- **Security Hardening:**
+    - Redacted all sensitive `.onion` addresses and PII from public documentation.
+    - Moved identity hostnames to the version-controlled-excluded `umbra/keys/` directory.
+    - Created `umbra/keys/README.md` to document secure identity management.
 - **Status:**
     - C-Tor and Arti are configured to run simultaneously.
     - Identity keys are securely archived and marked by implementation.
     - Automated rituals are fully operational and referenced in [CONTENTS.md](CONTENTS.md).
+    - Repository is hardened against accidental PII leaks.
