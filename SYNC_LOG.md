@@ -55,9 +55,14 @@ This log maintains the context of automated work performed within the `umbra` di
     - Restructured Neovim configuration into a unified super-project submodule.
     - Stabilized Neovim 0.11+ configuration by transitioning to native LSP APIs.
     - Converted Ghostty configuration to a submodule for better portability.
-- **Status:**
+- **Yazi File Manager**:
+    - Standardized Yazi configuration in `wormhole/yazi`.
+    - Integrated rich previews (video, pdf, markdown) and essential plugins (zoxide, git).
+    - Established themed environment with Catppuccin Mocha.
+- **Status**:
     - C-Tor and Arti are configured to run simultaneously.
     - Identity keys are securely archived and marked by implementation.
     - Automated rituals are fully operational and referenced in [CONTENTS.md](CONTENTS.md).
     - Repository is hardened against accidental PII leaks.
     - Neovim environment is error-free on 0.11.5.
+    - Yazi is fully operational with rich previews and plugins.
