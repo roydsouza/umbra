@@ -66,3 +66,7 @@ This log maintains the context of automated work performed within the `umbra` di
     - Repository is hardened against accidental PII leaks.
     - Neovim environment is error-free on 0.11.5.
     - Yazi is fully operational with rich previews and plugins.
+
+- **Yazi Architect**:
+    - Converted `yazi` from a local directory to a formal Git submodule.
+    - Standalone repository established at `https://github.com/roydsouza/yazi`.
