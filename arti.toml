@@ -1,0 +1,30 @@
+# (Built-in defaults for the arti configuration format.)
+# (This is an example file you can use as a template or as documentation.)
+
+# Rules about how arti should behave as an application
+[application]
+# If true, we should watch our configuration files for changes.
+watch_configuration = true
+# If true, we should allow other processes run by the same user to inspect this
+# process's memory.
+permit_debugging = false
+# If true, then we allow Arti to start even if the current user is root.
+allow_running_as_root = false
+
+# Set up the Arti program to run as a proxy.
+[proxy]
+# Default port to use when listening to SOCKS connections
+socks_listen = 9150
+
+# Port to use to listen for DNS requests.
+dns_listen = 0
+
+# Configure logging
+[logging]
+# Specify filtering directives for sending trace messages to the console
+console = "info"
+
+# Locations to use for storing things on disk.
+[storage]
+cache_dir = "${ARTI_CACHE}"
+state_dir = "${ARTI_LOCAL_DATA}"
