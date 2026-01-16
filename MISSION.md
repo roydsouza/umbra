@@ -16,7 +16,7 @@ Umbra is the dedicated privacy and anonymity subsystem for the **EventHorizon** 
     - **Identity Security:** Identity keys are stored within the `umbra/keys` directory. Agents must treat this directory as "Strictly Confidential".
     - **NO RELAY:** Under no circumstances should this node be configured as a public relay or exit node. It is strictly a client and hidden service host.
 * **Configuration:** Maintain a custom `torrc` and `arti.toml`.
-    - **Contact Info:** Ensure `ContactInfo` in `torrc` reflects the primary identity: Roy Peter D'Souza.
+    - **Contact Info:** Ensure `ContactInfo` in `torrc` avoids leaking primary PII while remaining reachabe.
 
 ## 4. Operational Protocols & State Management
 The agent is responsible for maintaining project state across three mandatory files:

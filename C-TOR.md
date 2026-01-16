@@ -43,7 +43,7 @@ This document provides a comprehensive overview of the C-based Tor implementatio
 
 ## 🧅 Hidden Service Identity
 
-- **Onion Address**: `rz3qehyktksgdpd53rad2fiorxo4qkxxhwhq6gjmn7xyavwey6lbo7qd.onion`
+- **Onion Address**: [Stored in umbra/keys/ctor/ONION_ADDRESS]
 - **Virtual Port**: `80` (mapped to `127.0.0.1:8080`)
 - **Master Keys (Root of Trust)**: Replicated to `umbra/keys/ctor/hidden_service/`
 - **Relay Keys**: Replicated to `umbra/keys/ctor/relay/`
@@ -105,7 +105,7 @@ To route application traffic through this C-Tor instance, configure your applica
 
 For SSH through Tor:
 ```bash
-ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:9050 %h %p' user@onionaddress.onion
+ssh -o ProxyCommand='nc -X 5 -x 127.0.0.1:9050 %h %p' user@[Address in keys/ctor/ONION_ADDRESS]
 ```
 
 ---

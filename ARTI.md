@@ -113,7 +113,7 @@ Example code to create a proxy-capable client:
 ```rust
 let config = TorClientConfig::default();
 let client = TorClient::create_bootstrapped(config).await?;
-let stream = client.connect(("example.onion", 80)).await?;
+let stream = client.connect(("[address].onion", 80)).await?;
 ```
 
 ---
