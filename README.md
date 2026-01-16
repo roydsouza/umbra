@@ -14,6 +14,7 @@ The project follows a three-phase roadmap to ensure a stable and forward-looking
 
 ## 3. Directory Contents
 
+-   `.agent/`: Contains automated workflows and rituals (e.g., sessions sync, upstream checks).
 -   `.git/`: The Git directory for the `umbra` project itself.
 -   `.gitignore`: Specifies files for Git to ignore, most notably the `keys/` directory.
 -   `.gitmodules`: Defines the Git submodules managed within this project.

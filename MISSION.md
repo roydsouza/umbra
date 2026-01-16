@@ -4,16 +4,17 @@
 Umbra is the dedicated privacy and anonymity subsystem for the **EventHorizon** ecosystem. Its primary goal is to provide a "Shadow Layer" for all outgoing and incoming communications, ensuring metadata resistance and identity obfuscation. It serves as a shared utility for subordinate projects like **GravityLens** and **RedShift**.
 
 ## 2. Architectural Roadmap
-* **Phase 1 (Legacy Core):** Deploy and configure the standard C-based Tor network implementation.
-* **Phase 2 (Modernization):** Integrate **Arti** (the Rust implementation of Tor) as a peer client.
-* **Phase 3 (Migration):** Transition primary traffic handling to Arti as it reaches feature parity and stability, maintaining the legacy implementation for specialized hidden service fallback.
+* **Phase 1 (Legacy Core):** Deploy and configure the standard C-based Tor implementation as a **Hidden Service** (No Relay).
+* **Phase 2 (Modernization):** Integrate **Arti** (the Rust implementation of Tor) and configure it for hidden service operations.
+* **Phase 3 (Migration):** Transition primary hidden service traffic to Arti as it reaches feature parity, decommissioning the legacy C-Tor implementation.
 
 ## 3. Technical Constraints & Optimizations
 * **Hardware Target:** Apple Silicon M5 (MacBook Pro)
 * **Compilation Strategy:** - All binaries must be compiled with specific optimizations for the M5 microarchitecture (e.g., `-march=apple-m5` or appropriate LLVM target features).
     - Prioritize hardware-accelerated AES and SHA instructions for cryptographic throughput.
 * **Security Posture:** - **Post-Quantum Readiness:** All implementations must be configured with PQC support (e.g., `--enable-pqc` for Tor/Arti builds).
-    - **Identity Security:** Identity keys are stored within the `umbra/keys` directory. Agents must treat this directory as "Strictly Confidential" and never output key material to logs or chat.
+    - **Identity Security:** Identity keys are stored within the `umbra/keys` directory. Agents must treat this directory as "Strictly Confidential".
+    - **NO RELAY:** Under no circumstances should this node be configured as a public relay or exit node. It is strictly a client and hidden service host.
 * **Configuration:** Maintain a custom `torrc` and `arti.toml`.
     - **Contact Info:** Ensure `ContactInfo` in `torrc` reflects the primary identity: Roy Peter D'Souza.
 
@@ -31,6 +32,10 @@ The agent is responsible for maintaining project state across three mandatory fi
 ### C. SYNC_LOG.md (The Checkpoint)
 - **Pre-Push:** The agent must log a summary of changes and validation results before pushing to GitHub.
 - **Post-Pull:** Upon opening the project, the agent must read the last entry of `SYNC_LOG.md` to reconcile its internal state with the latest remote changes.
+
+### D. Automated Rituals (The Workflow)
+- All agents MUST execute the [Sync Workflow](.agent/workflows/sync.md) upon entering the project and before checkpointing.
+- This include mandatory **Upstream Software Checks** for the `tor` and `arti` submodules.
 
 ## 5. Agent Constraints
 - Do not attempt to write outside the `~/antigravity/umbra/` hierarchy without explicit user confirmation.

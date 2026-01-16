@@ -1,1 +1,8 @@
 keys/
+bin/
+var/
+etc/
+target/
+PROMPTS.md
+torrc
+!etc/arti.toml

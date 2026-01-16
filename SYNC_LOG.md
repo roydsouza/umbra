@@ -27,3 +27,27 @@ This log maintains the context of automated work performed within the `umbra` di
     - Created a local `arti.toml` configuration file within the `umbra` directory.
     - Created a symbolic link from `~/Library/Application Support/org.torproject.Arti/arti.toml` to the local `arti.toml` file for easy configuration management.
     - Updated `ARTI.md` to clarify the location and symlinked nature of the `arti.toml` file.
+
+### Session: 2026-01-16
+
+- **Documentation Updates:**
+    - Reviewed workspace structure; created `TASKS.md` for `darkmatter` and `gravitylens`.
+    - Updated `MISSION.md` to explicitly strictly forbid Relay configuration and focus on Hidden Service migration.
+    - Updated `TASKS.md` and successfully migrated Tor keys from `/usr/local/tor-m5`.
+- **Arti Installation & Coexistence:**
+    - Compiled Arti 1.9.0 from source in `umbra/arti`.
+    - Installed Arti binary and configuration locally in `umbra/bin/` and `umbra/etc/`.
+    - Configured Arti to use port `9150` to coexist with C-Tor on `9050`.
+    - Established centralized key management in `umbra/keys/` with `ctor/` and `arti/` subdivisions.
+    - Created a macOS Launch Agent for Arti at `~/Library/LaunchAgents/org.torproject.arti.plist`.
+- **Documentation:**
+    - Created `C-TOR.md` to document the legacy core.
+    - Created `ARTI.md` to document the new Rust core.
+- **Automated Rituals:**
+    - Codified the [Sync Ritual](.agent/workflows/sync.md) for all future sessions.
+    - Protocol includes mandatory upstream software checks for `tor` and `arti`.
+    - Integrated the ritual into the `MISSION.md` directives.
+- **Status:**
+    - C-Tor and Arti are configured to run simultaneously.
+    - Identity keys are securely archived and marked by implementation.
+    - Automated rituals are fully operational and referenced in [CONTENTS.md](CONTENTS.md).
