@@ -21,6 +21,7 @@ This log maintains the context of automated work performed within the `umbra` di
 - **Documentation & Task Management:**
     - Created `TASKS.md` to track feature requests, tasks, and bugs.
     - Created `ARTI.md` to document the purpose, build process, and administration of the local Arti instance.
+    - Created `LISTS.md` as a historical ledger for bugs and feature requests, as specified in `MISSION.md`.
 
 - **Configuration:**
     - Created a local `arti.toml` configuration file within the `umbra` directory.
