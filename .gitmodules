@@ -4,3 +4,6 @@
 [submodule "arti"]
 	path = arti
 	url = https://gitlab.torproject.org/tpo/core/arti.git
+[submodule "shadowmenu"]
+	path = shadowmenu
+	url = https://github.com/roydsouza/shadowmenu.git
