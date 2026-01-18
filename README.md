@@ -1,28 +1,44 @@
-# Project Umbra: A Secure & Private Communication Layer
+# 🌑 Umbra: The Station's Cloaking Device
 
-## 1. Vision & Purpose
+**The dedicated privacy and anonymity subsystem for the Antigravity ecosystem.**
 
-As defined in `MISSION.md`, Umbra is the dedicated privacy and anonymity subsystem for the **EventHorizon** ecosystem. Its primary purpose is to provide a "Shadow Layer" for all outgoing and incoming communications, ensuring metadata resistance and identity obfuscation for other projects in the `antigravity` workspace.
+Umbra is the "Shadow Layer" of the station. Its mission is simple: make sure no one can see what we're doing. It provides metadata resistance and identity obfuscation for all station projects, ensuring that our presence on the decentralized frontier is felt, but never seen.
 
-## 2. Architectural Roadmap
+---
 
-The project follows a three-phase roadmap to ensure a stable and forward-looking privacy layer:
+## 🚀 The Architectural Roadmap
 
--   **Phase 1 (Legacy Core):** Deploy and utilize the standard C-based Tor implementation.
--   **Phase 2 (Modernization):** Integrate and build Arti, the next-generation Rust implementation of Tor.
--   **Phase 3 (Migration):** Gradually transition all traffic to Arti as it achieves feature-parity and stability.
+We are transitioning the station's cloak from legacy tech to the future:
 
-## 3. Directory Contents
+- **Phase 1 (Legacy Core):** Standard C-based Tor (The reliable workhorse).
+- **Phase 2 (Modernization):** **Arti** — The Rust-based future of Tor (The stealth jet).
+- **Phase 3 (Migration):** Full decommission of legacy Tor in favor of a 100% Rust-powered cloak.
 
--   `.agent/`: Contains automated workflows and rituals (e.g., sessions sync, upstream checks).
--   `.git/`: The Git directory for the `umbra` project itself.
--   `.gitignore`: Specifies files for Git to ignore, most notably the `keys/` directory.
--   `.gitmodules`: Defines the Git submodules managed within this project.
--   `arti/`: A Git submodule containing the source code for the **Arti** project, a Rust-based implementation of Tor. This is the focus of Phase 2 and 3.
--   `ARTI.md`: Detailed documentation on the local Arti instance, including build, configuration, and administration instructions.
--   `arti.toml`: The local configuration file for the Arti client. This file is symlinked from the default system location (`~/Library/Application Support/org.torproject.Arti/`) to allow for version control and easy editing.
--   `keys/`: A git-ignored directory for storing sensitive, persistent identity keys for Tor and Arti services.
--   `MISSION.md`: The core directive, technical requirements, and operational protocols for the Umbra project.
--   `SYNC_LOG.md`: A log of significant changes, build processes, and session context for the `umbra` project.
--   `TASKS.md`: A file for tracking high-level feature requests, bugs, and other engineering tasks.
--   `tor/`: A Git submodule containing the source code for the C-based **Tor** project. This is the focus of Phase 1.
+## 📂 The Cloak's Components
+
+- **`missioncontrol/`**: The administration deck. Our high-level interface for managing hidden services and privacy parameters.
+- **`arti/`**: The Arti source and build environment (Git Submodule).
+- **`tor/`**: The legacy C-Tor source (Git Submodule).
+- **`keys/`**: The Station's heart. Contains our private identities (**Strictly Confidential**).
+- **`ARTI.md`**: Tactical manual for the Arti implementation.
+- **`arti.toml`**: The master configuration for our anonymous traffic.
+
+---
+
+## 🛠️ Operational Protocols
+
+### The Checkpoint Ritual
+To record the cloak's state and sync with the mission logs:
+```zsh
+checkpoint
+```
+
+### Vibe Coding
+Type `vcode` to summon an agent for help with hidden service deployment or Arti optimization.
+
+---
+
+> [!CAUTION]
+> **Signal Jamming:** If `missioncontrol` reports a failure in the Arti circuit, assume the station is visible. Re-engage the cloak before proceeding with sensitive operations.
+
+*Built by [Google AntiGravity](https://chromewebstore.google.com/detail/antigravity-browser-exten/eeijfnjmjelapieobjiielcpmhhchbkg)*

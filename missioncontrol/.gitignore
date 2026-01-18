@@ -1,0 +1,17 @@
+# Build artifacts
+/target/
+
+# Sensitive keys and secrets
+/keys/
+*.key
+.env
+secrets.toml
+
+# Database (can be regenerated)
+/data/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
