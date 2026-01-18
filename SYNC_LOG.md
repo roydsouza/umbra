@@ -132,3 +132,14 @@ This log maintains the context of automated work performed within the `umbra` di
 ## [2026-01-17 21:06] - Automated Checkpoint
 - **Action**: Recursive session sync via station-wide checkpoint.
 - **Status**: Changes committed and pushed to remote.
+
+## [2026-01-17 21:19] - Ghostty Optimization
+- **Ghostty**: Optimized terminal environment for Pali scholasticism.
+    - **Typography**: Installed **Intel One Mono** and configured  for perfect diacritic rendering.
+    - **Input**: Disabled  to restore native Option-key composition for the Pali keyboard.
+    - **Infrastructure**: Repaired Starship symlinks and refined station aesthetics (EventHorizon Glass).
+- **Action**: Performed global recursive checkpoint to synchronize these configuration upgrades.
+
+## [2026-01-17 21:19] - Automated Checkpoint
+- **Action**: Recursive session sync via station-wide checkpoint.
+- **Status**: Changes committed and pushed to remote.
