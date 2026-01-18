@@ -7,3 +7,6 @@
 [submodule "shadowmenu"]
 	path = shadowmenu
 	url = https://github.com/roydsouza/shadowmenu.git
+[submodule "guardian"]
+	path = guardian
+	url = https://github.com/roydsouza/guardian
