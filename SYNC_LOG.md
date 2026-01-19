@@ -147,3 +147,12 @@ This log maintains the context of automated work performed within the `umbra` di
 - Wormhole: Overhauled documentation for tmux, yazi, openinterpreter.
 - Wormhole: Optimized tmux configuration and installed plugins.
 
+## [2026-01-18 18:20] - Guardian Integration Complete
+- **MissionControl**: Fully integrated **Guardian (Network Shield)** as a first-class citizen.
+    - Implemented `GuardianClient` integration layer in Rust.
+    - Built real-time WebSocket dashboard for network leak monitoring.
+    - Established historical leak persistence in MissionControl SQLite brain.
+    - Added comprehensive styling and UI for the Guardian Shield dashboard.
+- **Action**: Performed global recursive checkpoint to synchronize the Guardian integration and task list updates.
+- **Status**: MissionControl service is operational and monitoring for leaks.
+

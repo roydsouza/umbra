@@ -4,11 +4,27 @@ This log maintains the context of automated work performed within the `missionco
 
 ---
 
-### Session: 2026-01-17 (Follow-up)
-- **Clarification:** Updated documentation to explicitly state that `missioncontrol` will **only** use Arti for Tor network connectivity, and will not interact with the legacy C-Tor implementation.
-- **Hardening:** Added a "Deal Breaker" item to `SECURITY.md` to prevent hardcoding of C-Tor ports or paths.
-- **Next Step:** The project's dependency on Arti is now unambiguously documented.
+### Session: 2026-01-18 (Guardian Integration & Persistence)
+- Implemented `GuardianClient` in `integrations/guardian.rs`.
+- Added `leak_events` persistence to MissionControl Brain (SQLite).
+- Built Guardian Dashboard with real-time WebSocket stream relay.
+- Updated navigation and home page with Guardian status widgets.
+- Added feature request for contextual help button in `TASKS.md`.
+- **Checkpoint**: Verified service start and dashboard access.
 
+---
+
+### Session: 2026-01-18
+- **Comprehensive Review & Gap Analysis**:
+    - **Discovery:** Performed a deep-dive into the existing codebase. Found a working Axum server, background Arti bootstrap, 6 functional UI pages (SSR), and DarkMatter metrics integration.
+    - **Gap Analysis:** Identified that **Guardian integration is completely missing**, and most UI data is currently static placeholders.
+    - **Task Overhaul:** Created a comprehensive `TASKS.md` with 10 critical improvement areas, a priority matrix, and a detailed specification for the "Network Shield" (Guardian) integration.
+    - **Prioritization:** Set P0 priority on Guardian integration and Real-Time Data (WebSocket) implementation.
+- **Next Step:** Ready to begin Phase 2: Implementation of the Guardian integration and real-time data layer.
+
+---
+
+### Session: 2026-01-17 (Follow-up)
 ---
 
 ### Session: 2026-01-17

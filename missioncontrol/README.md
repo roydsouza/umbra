@@ -1,6 +1,6 @@
 # MissionControl: Onion-Routed Command Interface
 
-MissionControl is a resilient, high-performance "Router" interface for the EventHorizon ecosystem. It provides a secure and private "command center" accessible via a Tor Onion Service, allowing interaction with the user's ecosystem (DeFi metrics, system status, etc.) from any device.
+MissionControl is a resilient, high-performance command center for the EventHorizon ecosystem. It provides a secure and private dashboard accessible via a Tor Onion Service, unifying monitoring and control of the Umbra ecosystem.
 
 ## Core Features
 
@@ -9,19 +9,29 @@ MissionControl is a resilient, high-performance "Router" interface for the Event
 *   **High-Quality UI:** Features a dark, high-tech, and compelling aesthetic designed for laptop use, consistent with the visual style of GravityLens.
 *   **Zero-Leak Architecture:** Designed to prevent accidental leakage of IP addresses, server details, or other identifying information.
 
+## Integrated Services
+
+| Service | Purpose | Endpoint |
+|---------|---------|----------|
+| **Arti** | Tor connectivity, Onion Services | Internal |
+| **Guardian** | Network leak detection & policy | `127.0.0.1:9109` |
+| **DarkMatter** | Crypto node monitoring (Zebra, Monero) | Various |
+| **GravityLens** | Wallet tracking & forensics (future) | TBD |
+
 ## Tor Implementation
 
-This project is designed to use **Arti exclusively**. It will not use, connect to, or interact with the legacy C-Tor implementation. All Tor network connectivity is to be handled programmatically via the `arti-client` crate, which connects to the running Arti daemon. This decision is based on the project's security-first principle, leveraging Arti's memory-safe Rust implementation.
+This project uses **Arti exclusively**. It will not use, connect to, or interact with the legacy C-Tor implementation. All Tor network connectivity is handled programmatically via the `arti-client` crate.
 
 ## Project Status
 
-This project is in the pre-planning and research phase. The core architecture and security posture have been defined. See the following documents for more details:
+This project is in active development. The core infrastructure (Axum server, Arti bootstrap, UI pages) is implemented. See the following documents for details:
 
 *   **[MISSION.md](MISSION.md):** The high-level vision and goals.
-*   **[ARCHITECTURE.md](ARCHITECTURE.md):** The proposed technical architecture.
+*   **[ARCHITECTURE.md](ARCHITECTURE.md):** The technical architecture including Guardian integration.
 *   **[SECURITY.md](SECURITY.md):** The security strategy and threat mitigations.
-*   **[TASKS.md](TASKS.md):** The implementation plan and task list.
+*   **[TASKS.md](TASKS.md):** The implementation plan and priorities.
 
 ## Adjacent Projects
 
-This service relies heavily on the **Arti** instance managed by the parent **[Umbra](../)** project for its connection to the Tor network.
+*   **[Umbra](../):** Parent project managing the Arti instance.
+*   **[Guardian](../guardian/):** Headless network leak detector — MissionControl is its primary UI.

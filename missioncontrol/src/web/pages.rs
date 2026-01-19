@@ -5,6 +5,7 @@
 use std::sync::Arc;
 use axum::{extract::State, response::Html};
 use crate::AppState;
+use tracing::{info, error};
 
 /// Render the HTML shell with navigation
 fn render_page(title: &str, content: &str) -> String {
@@ -33,7 +34,8 @@ fn render_page(title: &str, content: &str) -> String {
                 <a href="/circuits" class="nav-link">Circuits</a>
                 <a href="/services" class="nav-link">Services</a>
                 <a href="/metrics" class="nav-link">Metrics</a>
-                <a href="/integrations" class="nav-link" style="color: #a855f7;">Integrations</a>
+                <a href="/integrations" class="nav-link">Integrations</a>
+                <a href="/guardian" class="nav-link" style="color: #ef4444;">Guardian</a>
                 <a href="/config" class="nav-link">Config</a>
             </div>
         </nav>
@@ -83,6 +85,12 @@ pub async fn home(State(state): State<Arc<AppState>>) -> Html<String> {
             <p class="card-description">Bandwidth, latency, and health stats</p>
             <span class="card-arrow">→</span>
         </a>
+        <a href="/guardian" class="dashboard-card card-red">
+            <div class="card-icon">🛡️</div>
+            <h3 class="card-title">Guardian</h3>
+            <p class="card-description">Network leak shield and monitoring</p>
+            <span class="card-arrow">→</span>
+        </a>
     </div>
     
     <section class="quick-stats">
@@ -101,7 +109,11 @@ pub async fn home(State(state): State<Arc<AppState>>) -> Html<String> {
                 <span class="stat-label">Onion Services</span>
             </div>
             <div class="stat-card">
-                <span class="stat-value">0</span>
+                <span class="stat-value" id="guardian-stat-leaks">0</span>
+                <span class="stat-label">Leaks Detected</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">1</span>
                 <span class="stat-label">Integrations</span>
             </div>
         </div>
@@ -112,7 +124,11 @@ pub async fn home(State(state): State<Arc<AppState>>) -> Html<String> {
             <h2>🔗 Integrations</h2>
             <span class="badge badge-info">Coming Soon</span>
         </div>
-        <div class="integration-list">
+            <div class="integration-card">
+                <span class="integration-icon">🛡️</span>
+                <span class="integration-name">Guardian</span>
+                <span class="integration-status status-online">Connected</span>
+            </div>
             <div class="integration-card">
                 <span class="integration-icon">🌑</span>
                 <span class="integration-name">DarkMatter</span>
@@ -561,8 +577,8 @@ pub async fn config_page(State(state): State<Arc<AppState>>) -> Html<String> {
     </section>
 </div>
 "#, 
-        listen = state.config.listen_addr,
-        db_path = state.config.database_path.display(),
+        listen = state.config.server.listen_addr,
+        db_path = state.config.server.database_path.display(),
         arti_state = state.config.arti.state_dir.display()
     );
     Html(render_page("Configuration", &content))
@@ -684,4 +700,114 @@ pub async fn integrations(State(_state): State<Arc<AppState>>) -> Html<String> {
 <script src="/static/js/integrations.js"></script>
 "#;
     Html(render_page("Integrations", content))
+}
+
+/// Guardian Network Shield page
+pub async fn guardian(State(state): State<Arc<AppState>>) -> Html<String> {
+    let content = format!(r#"
+<div class="page">
+    <header class="page-header">
+        <h1>🛡️ Guardian Network Shield</h1>
+        <p class="subtitle">Real-time network leak monitoring and process attribution</p>
+    </header>
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-card card-red">
+            <div class="card-icon">🚨</div>
+            <h3 class="card-title">Live Leaks</h3>
+            <p class="card-value" id="live-leak-count">0</p>
+            <p class="card-label">Last 24 Hours</p>
+        </div>
+        <div class="dashboard-card card-green">
+            <div class="card-icon">🛡️</div>
+            <h3 class="card-title">Protection</h3>
+            <p class="card-value" id="protected-apps-count">0</p>
+            <p class="card-label">Protected Apps</p>
+        </div>
+        <div class="dashboard-card card-blue">
+            <div class="card-icon">🌐</div>
+            <h3 class="card-title">DNS Layer</h3>
+            <p class="card-value" id="dns-status">Secured</p>
+            <p class="card-label">Tor-Only Policy</p>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="section-header">
+            <h2>🛡️ Live Traffic Stream</h2>
+            <div class="button-group">
+                <span class="badge badge-success" id="stream-status">Live Connected</span>
+                <button class="btn btn-secondary btn-small" onclick="clearLeakLogs()">Clear</button>
+            </div>
+        </div>
+        <div class="log-viewer leak-stream" id="leak-log-viewer">
+            <!-- Leak events will be injected here via WebSocket -->
+            <div class="log-entry info placeholder-entry">
+                <span class="log-time">--:--:--</span>
+                <span class="log-level">INFO</span>
+                <span class="log-msg">Waiting for Guardian events...</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2>📜 Leak History (MissionControl Brain)</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table" id="leak-history-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Process</th>
+                        <th>PID</th>
+                        <th>Destination</th>
+                        <th>Severity</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="leak-history-body">
+                    <!-- Historical records from local DB -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2>⚙️ Guardian Configuration</h2>
+        </div>
+        <div class="config-grid">
+            <form id="guardian-config-form" onsubmit="updateGuardianConfig(event)">
+                <div class="form-group">
+                    <label>DNS Leak Policy</label>
+                    <select name="dns_policy" class="form-input">
+                        <option value="tor_only">Strict (Tor Only)</option>
+                        <option value="warn">Warn (Log but allow)</option>
+                        <option value="allow">Allow All (Insecure)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Guardian API Port</label>
+                    <input type="number" value="{api_port}" disabled class="form-input">
+                    <small>Configure via <code>missioncontrol.toml</code></small>
+                </div>
+                <div class="form-group">
+                    <label>Historical Persistence</label>
+                    <input type="checkbox" checked disabled>
+                    <small>Enabled (MissionControl Brain Mode)</small>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Configuration</button>
+                    <button type="button" class="btn btn-danger" onclick="emergencyKill()">🚨 EMERGENCY KILLSWITCH</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+<script src="/static/js/guardian.js"></script>
+"#, api_port = state.config.guardian.api_port);
+    
+    Html(render_page("Guardian", &content))
 }

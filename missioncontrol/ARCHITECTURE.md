@@ -1,39 +1,58 @@
 # MissionControl: High-Level Architecture
 
-This document outlines the proposed architecture for the MissionControl Onion Service. The design prioritizes security, performance, and modularity.
+This document outlines the architecture for the MissionControl command center. The design prioritizes security, performance, modularity, and integration with the Umbra ecosystem's backend services.
 
 ## 1. Core Components
 
-The system is composed of three main logical components. It is designed to be self-contained and relies *exclusively* on an Arti process for Tor network access, with no interaction with C-Tor.
+The system is composed of multiple logical components, designed to be self-contained and modular.
 
-1.  **Arti Client (`arti-client`):** The **sole** bridge to the Tor network. It is responsible for establishing a connection, launching the Onion Service, and routing incoming requests.
-2.  **Axum Web Server (`axum`):** The application layer that handles incoming HTTP requests from the Tor network, processes them, and returns responses.
-3.  **Service Logic:** The core business logic of the application, which gathers the data to be displayed (e.g., system metrics, DeFi portfolio status).
+### Frontend (User Interface)
+- **Axum Web Server (`axum`):** Serves the web UI, handles HTTP requests, and manages WebSocket connections for real-time updates.
 
-```mermaid
-graph TD
-    subgraph User Device
-        direction LR
-        A[Tor Browser] --> B{Tor Network};
-    end
+### Backend Services (Integrated)
+1. **Arti Client (`arti-client`):** The **sole** bridge to the Tor network. Responsible for establishing connections, launching Onion Services, and routing requests.
+2. **Guardian Service:** Headless network leak detector running on `127.0.0.1:9109`. MissionControl consumes its API for real-time leak monitoring and policy configuration.
+3. **DarkMatter Module:** Integrates with crypto nodes (Zebra, Monero) for blockchain metrics.
 
-    subgraph "Host Machine (EventHorizon M5)"
-        direction LR
-        subgraph MissionControl Process
-            C(Arti Client) -- Forwards Request --> D(Axum Server);
-            D -- Invokes --> E(Service Logic);
-            E -- Returns Data --> D;
-            D -- Returns Response --> C;
-        end
-        B -- Encrypted Request --> C;
-    end
+### Service Logic
+- Core business logic for aggregating data from Arti, Guardian, and DarkMatter into a unified dashboard.
 
-    style A fill:#D6B4FC,stroke:#333,stroke-width:2px
-    style B fill:#C1E1C1,stroke:#333,stroke-width:2px
-    style C fill:#FFCBA4,stroke:#333,stroke-width:2px
-    style D fill:#A7C7E7,stroke:#333,stroke-width:2px
-    style E fill:#FDFD96,stroke:#333,stroke-width:2px
 ```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           User Device                                        │
+│   ┌─────────────┐                                                           │
+│   │ Tor Browser │ ──────────────► Tor Network ──────────────┐               │
+│   └─────────────┘                                           │               │
+└─────────────────────────────────────────────────────────────┼───────────────┘
+                                                              │
+┌─────────────────────────────────────────────────────────────▼───────────────┐
+│                    Host Machine (EventHorizon M5)                            │
+│                                                                              │
+│   ┌──────────────────────────────────────────────────────────────────────┐  │
+│   │                    MissionControl Process                             │  │
+│   │  ┌────────────┐    ┌──────────────┐    ┌─────────────────────────┐   │  │
+│   │  │ Arti Client│◄──►│ Axum Server  │◄──►│    Service Logic        │   │  │
+│   │  │ (Tor/Onion)│    │ (Web UI)     │    │ (Dashboard aggregation) │   │  │
+│   │  └────────────┘    └──────────────┘    └───────────┬─────────────┘   │  │
+│   └────────────────────────────────────────────────────┼─────────────────┘  │
+│                                                        │                     │
+│   ┌────────────────────────────────────────────────────┼─────────────────┐  │
+│   │                    Integrated Backend Services     │                  │  │
+│   │  ┌─────────────────┐  ┌──────────────────────────┐ │                  │  │
+│   │  │ Guardian        │  │ DarkMatter Nodes         │◄┘                  │  │
+│   │  │ 127.0.0.1:9109  │  │ zebrad, monerod          │                    │  │
+│   │  │ (Leak Detector) │  │ (Prometheus metrics)     │                    │  │
+│   │  └─────────────────┘  └──────────────────────────┘                    │  │
+│   └───────────────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Guardian Integration Flow
+1. MissionControl's Service Logic connects to Guardian's HTTP API (`127.0.0.1:9109`).
+2. Fetches current status via `GET /status`.
+3. Establishes WebSocket connection to `/stream` for real-time leak events.
+4. Displays events on the `/guardian` page.
+5. Policy changes from UI are pushed via `POST /config`.
 
 ## 2. Technical Stack
 

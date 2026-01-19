@@ -3,6 +3,7 @@
 //! Provides connectors for DarkMatter, GravityLens, and future projects.
 
 pub mod darkmatter;
+pub mod guardian;
 
 use serde::Serialize;
 

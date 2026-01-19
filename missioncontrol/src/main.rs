@@ -7,9 +7,7 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 
 use axum::{
-    extract::State,
     http::HeaderValue,
-    response::Html,
     routing::get,
     Router,
 };
@@ -27,22 +25,26 @@ mod web;
 use crate::arti::ArtiManager;
 use crate::config::Config;
 use crate::db::Database;
+use crate::integrations::guardian::GuardianClient;
 
 /// Shared application state
 pub struct AppState {
     pub config: Config,
     pub arti: RwLock<Option<ArtiManager>>,
     pub db: Database,
+    pub guardian: Arc<GuardianClient>,
 }
 
 impl AppState {
     pub async fn new(config: Config) -> anyhow::Result<Self> {
-        let db = Database::open(&config.database_path)?;
+        let db = Database::open(&config.server.database_path)?;
+        let (guardian, _) = GuardianClient::new(config.guardian.clone(), db.clone());
         
         Ok(Self {
             config,
             arti: RwLock::new(None),
             db,
+            guardian,
         })
     }
 }
@@ -66,7 +68,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Initialize application state
     let state = Arc::new(AppState::new(config.clone()).await?);
-    info!("Database initialized at: {:?}", config.database_path);
+    info!("Database initialized at: {:?}", config.server.database_path);
 
     // Bootstrap Arti in background (non-blocking startup)
     let arti_state = state.clone();
@@ -84,6 +86,9 @@ async fn main() -> anyhow::Result<()> {
         }
     });
 
+    // Start Guardian integration worker
+    state.guardian.clone().spawn_worker();
+
     // Build router with security middleware
     let app = Router::new()
         // Web pages
@@ -92,6 +97,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/services", get(web::pages::services))
         .route("/metrics", get(web::pages::metrics))
         .route("/integrations", get(web::pages::integrations))
+        .route("/guardian", get(web::pages::guardian))
         .route("/config", get(web::pages::config_page))
         // API endpoints
         .nest("/api", web::api::router())
@@ -105,7 +111,7 @@ async fn main() -> anyhow::Result<()> {
         .with_state(state);
 
     // Bind to localhost only (security requirement)
-    let addr: SocketAddr = config.listen_addr.parse()?;
+    let addr: SocketAddr = config.server.listen_addr.parse()?;
     info!("🔒 Binding to {} (localhost only)", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await?;

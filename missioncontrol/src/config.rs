@@ -9,13 +9,9 @@ use serde::Deserialize;
 /// MissionControl configuration
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
-    /// Address to bind the web server (default: 127.0.0.1:3030)
-    #[serde(default = "default_listen_addr")]
-    pub listen_addr: String,
-    
-    /// Path to SQLite database
-    #[serde(default = "default_database_path")]
-    pub database_path: PathBuf,
+    /// Server-specific configuration
+    #[serde(default)]
+    pub server: ServerConfig,
     
     /// Path to configuration file (for display only)
     #[serde(skip)]
@@ -24,6 +20,30 @@ pub struct Config {
     /// Arti-specific configuration
     #[serde(default)]
     pub arti: ArtiConfig,
+    
+    /// Guardian-specific configuration
+    #[serde(default)]
+    pub guardian: GuardianConfig,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ServerConfig {
+    /// Address to bind the web server (default: 127.0.0.1:3030)
+    #[serde(default = "default_listen_addr")]
+    pub listen_addr: String,
+    
+    /// Path to SQLite database
+    #[serde(default = "default_database_path")]
+    pub database_path: PathBuf,
+}
+
+impl Default for ServerConfig {
+    fn default() -> Self {
+        Self {
+            listen_addr: default_listen_addr(),
+            database_path: default_database_path(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -35,6 +55,36 @@ pub struct ArtiConfig {
     /// Path to Arti cache directory  
     #[serde(default = "default_arti_cache_dir")]
     pub cache_dir: PathBuf,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct GuardianConfig {
+    /// URL for Guardian API
+    #[serde(default = "default_guardian_url")]
+    pub api_url: String,
+    
+    /// Port for Guardian API
+    #[serde(default = "default_guardian_port")]
+    pub api_port: u16,
+    
+    /// Whether Guardian integration is enabled
+    #[serde(default = "default_true")]
+    pub enabled: bool,
+    
+    /// Whether to store historical leak data
+    #[serde(default = "default_true")]
+    pub store_history: bool,
+}
+
+impl Default for GuardianConfig {
+    fn default() -> Self {
+        Self {
+            api_url: default_guardian_url(),
+            api_port: default_guardian_port(),
+            enabled: true,
+            store_history: true,
+        }
+    }
 }
 
 fn default_listen_addr() -> String {
@@ -51,6 +101,18 @@ fn default_arti_state_dir() -> PathBuf {
 
 fn default_arti_cache_dir() -> PathBuf {
     PathBuf::from("data/arti/cache")
+}
+
+fn default_guardian_url() -> String {
+    "http://127.0.0.1".to_string()
+}
+
+fn default_guardian_port() -> u16 {
+    9109
+}
+
+fn default_true() -> bool {
+    true
 }
 
 impl Config {
@@ -70,7 +132,7 @@ impl Config {
         config.config_path = config_path;
         
         // Ensure data directories exist
-        if let Some(parent) = config.database_path.parent() {
+        if let Some(parent) = config.server.database_path.parent() {
             std::fs::create_dir_all(parent)?;
         }
         std::fs::create_dir_all(&config.arti.state_dir)?;
