@@ -1,0 +1,15 @@
+# MissionControl Default Configuration
+
+[server]
+listen_addr = "127.0.0.1:3030"
+database_path = "data/missioncontrol.db"
+
+[arti]
+state_dir = "data/arti/state"
+cache_dir = "data/arti/cache"
+
+[guardian]
+api_url = "http://127.0.0.1"
+api_port = 9109
+enabled = true
+store_history = true

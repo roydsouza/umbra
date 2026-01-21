@@ -1,0 +1,23 @@
+[package]
+name = "missioncontrol-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Async Runtime
+tokio = { version = "1", features = ["full"] }
+
+# Tor
+arti-client = { version = "0.23", features = ["full"] }
+tor-rtcompat = { version = "0.23", features = ["tokio"] }
+
+# Utilities
+anyhow = "1"
+thiserror = "1"
+tracing = "0.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+reqwest = { version = "0.12", features = ["json"] }
+figment = { version = "0.10", features = ["toml", "env"] }
+chrono = { version = "0.4", features = ["serde"] }

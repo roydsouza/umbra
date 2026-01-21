@@ -1,0 +1,69 @@
+use crate::state::AppState;
+use tauri::State;
+use std::sync::Arc;
+use missioncontrol_core::arti::BootstrapStatus;
+
+#[derive(serde::Serialize)]
+pub struct ArtiStatusResponse {
+    pub bootstrapped: bool,
+    pub percentage: u8,
+    pub message: String,
+    pub circuit_count: usize,
+}
+
+#[derive(serde::Serialize)]
+pub struct SystemStats {
+    pub uptime_seconds: u64,
+    pub arti_ready: bool,
+    pub guardian_connected: bool,
+    pub leaks_detected: usize,
+}
+
+#[tauri::command]
+pub async fn get_arti_status(state: State<'_, Arc<AppState>>) -> Result<ArtiStatusResponse, String> {
+    let arti_lock = state.arti.read().await;
+    match &*arti_lock {
+        Some(manager) => {
+            let status = manager.status();
+            Ok(ArtiStatusResponse {
+                bootstrapped: status.bootstrapped,
+                percentage: status.percentage,
+                message: status.message,
+                circuit_count: manager.circuit_count(),
+            })
+        }
+        None => Ok(ArtiStatusResponse {
+            bootstrapped: false,
+            percentage: 0,
+            message: "Bootstrapping...".to_string(),
+            circuit_count: 0,
+        }),
+    }
+}
+
+#[tauri::command]
+pub async fn get_guardian_status(state: State<'_, Arc<AppState>>) -> Result<serde_json::Value, String> {
+    state.guardian.get_status().await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn get_system_stats(state: State<'_, Arc<AppState>>) -> Result<SystemStats, String> {
+    let arti_ready = state.arti.read().await.is_some();
+    // In a real app, track uptime properly. For now, just 0/placeholder.
+    let uptime = 0; 
+    
+    // Check Guardian connection by getting status (lightweight check)
+    let guardian_status = state.guardian.get_status().await;
+    let guardian_connected = guardian_status.is_ok();
+    
+    // Get recent leaks count (mocked or from db)
+    // let leaks = state.db.get_recent_leaks_count().unwrap_or(0);
+    let leaks = 0; // DB method needs to be exposed first
+
+    Ok(SystemStats {
+        uptime_seconds: uptime,
+        arti_ready,
+        guardian_connected,
+        leaks_detected: leaks,
+    })
+}
