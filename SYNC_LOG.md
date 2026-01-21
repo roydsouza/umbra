@@ -198,3 +198,6 @@ This log maintains the context of automated work performed within the `umbra` di
   - Secured with **macOS LaunchAgent** resonance for 100% uptime.
   - Integrated with `roydsouza/localhost`.
 - **Action**: Performed global recursive checkpoint.
+### [2026-01-20] 18:30 - PaliNLP Submodule Integration
+- **Project Pali**: Integrated **PaliNLP** (original) as a Git submodule in the project root to consolidate third-party NLP tools.
+- **Action**: Performed global recursive checkpoint and pushed changes to remote.
