@@ -6,8 +6,7 @@ This file provides an alphabetical index of the documentation and configuration 
 
 ### 📂 Configuration Files
 
-- [`arti.toml`](arti.toml): The primary configuration file for the **Arti** (Rust) client. Manages SOCKS ports (`9150`), logging, and local storage paths.
-- [`torrc`](file:///usr/local/tor-m5/etc/tor/torrc): The primary configuration file for the **C-Tor** (Legacy) client. Manages ORPorts, Hidden Services, and M5-specific hardware acceleration settings.
+- [`arti.toml`](arti.toml): The primary configuration file for the **Arti** (Rust) client. Manages SOCKS ports (`9050`), logging, and local storage paths.
 
 ---
 

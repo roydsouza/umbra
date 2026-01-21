@@ -1,10 +1,13 @@
-# C-Tor (Legacy Core)
+# C-Tor (Legacy Core) - [DECOMMISSIONED]
 
-This document provides a comprehensive overview of the C-based Tor implementation (C-Tor) as it is configured and built on this system.
+> [!WARNING]
+> This implementation has been officially decommissioned as of 2026-01-21. 
+> The project has standardized exclusively on **Arti** (Rust). 
+> All binary artifacts and the `tor/` submodule have been removed.
 
 ---
 
-## 🏗️ Source & Build Information
+## 🏗️ Archive Information
 
 - **Source Code**: Located as a Git submodule in `umbra/tor/`.
 - **Upstream**: Official Tor Project repository (`https://gitlab.torproject.org/tpo/core/tor.git`).

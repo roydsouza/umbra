@@ -246,3 +246,11 @@ This log maintains the context of automated work performed within the `umbra` di
     - Wrapped Zebra execution with torsocks for mandatory proxy enforcement.
   - **MissionControl**: Integrated Start/Stop node controls for Zebra in the DarkMatter dashboard.
 - **Action**: Performed global recursive checkpoint.
+
+### [2026-01-21] 16:40 - Legacy C-Tor Final Decommissioning
+- **Project Umbra**:
+  - **Cleanup**: Permanently removed the legacy C-based Tor binary environment at `/usr/local/tor-m5`.
+  - **Orchestration**: Deleted the legacy macOS Launch Agent (`org.torproject.tor.plist`).
+  - **Submodule Management**: Retired and removed the `tor/` submodule from the station.
+  - **Standardisation**: Updated all documentation (`MISSION.md`, `CONTENTS.md`, `ARTI.md`, `C-TOR.md`) to reflect a 100% Arti-based architecture on port 9050.
+- **Action**: Performed final global station checkpoint.

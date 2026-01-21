@@ -6,17 +6,18 @@ Umbra is the dedicated privacy and anonymity subsystem for the **EventHorizon** 
 ## 2. Architectural Roadmap
 * **Phase 1 (Legacy Core):** Deploy and configure the standard C-based Tor implementation as a **Hidden Service** (No Relay).
 * **Phase 2 (Modernization):** Integrate **Arti** (the Rust implementation of Tor) and configure it for hidden service operations.
-* **Phase 3 (Migration):** Transition primary hidden service traffic to Arti as it reaches feature parity, decommissioning the legacy C-Tor implementation.
+* **Phase 3 (Migration):** [COMPLETE] Transition primary hidden service traffic to Arti, decommissioning the legacy C-Tor implementation.
 
 ## 3. Technical Constraints & Optimizations
 * **Hardware Target:** Apple Silicon M5 (MacBook Pro)
+* **Tor Backend**: Standardized 100% on **Arti** (Rust). Legacy C-Tor has been decommissioned and removed.
+* **Port Protocol**: Standard Port **9050** is reserved exclusively for the Arti SOCKS gateway.
 * **Compilation Strategy:** - All binaries must be compiled with specific optimizations for the M5 microarchitecture (e.g., `-march=apple-m5` or appropriate LLVM target features).
     - Prioritize hardware-accelerated AES and SHA instructions for cryptographic throughput.
 * **Security Posture:** - **Post-Quantum Readiness:** All implementations must be configured with PQC support (e.g., `--enable-pqc` for Tor/Arti builds).
     - **Identity Security:** Identity keys are stored within the `umbra/keys` directory. Agents must treat this directory as "Strictly Confidential".
     - **NO RELAY:** Under no circumstances should this node be configured as a public relay or exit node. It is strictly a client and hidden service host.
-* **Configuration:** Maintain a custom `torrc` and `arti.toml`.
-    - **Contact Info:** Ensure `ContactInfo` in `torrc` avoids leaking primary PII while remaining reachabe.
+* **Configuration:** Maintain a custom `arti.toml`.
 
 ## 4. Operational Protocols & State Management
 The agent is responsible for maintaining project state across three mandatory files:

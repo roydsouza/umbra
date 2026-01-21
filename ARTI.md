@@ -27,7 +27,7 @@ Arti is configured to coexist with C-Tor by using the `91xx` port range:
 
 | Service | Port | Binding | Description |
 |---------|------|---------|-------------|
-| **SOCKS Proxy** | `9150` | `127.0.0.1` | Main Arti proxy |
+| **SOCKS Proxy** | `9050` | `127.0.0.1` | Main Arti proxy (Standard Tor Port) |
 | **RPC / Control** | `9152` | `127.0.0.1` | Proposed future RPC port |
 
 ---
@@ -141,3 +141,8 @@ git log HEAD..origin/main --oneline
 2. **Re-build**: `cargo build --release`
 3. **Commit**: `git add arti && git commit -m "Upgrade Arti to latest"`
 4. **Restart**: `killall arti` (or use launchctl)
+
+### [DECOMMISSIONED] C-Tor Transition
+Project Umbra has officially decommissioned the legacy C-based Tor node. All traffic and identity keys have been migrated to Arti.
+- **Historic Port**: 9050 (now owned by Arti)
+- **Historic Keys**: Archived in umbra/keys/ctor/
