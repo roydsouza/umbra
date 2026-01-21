@@ -10,6 +10,7 @@ pub mod manager;
 use serde::Serialize;
 
 /// Common trait for all node integrations
+#[allow(async_fn_in_trait)]
 pub trait NodeIntegration {
     /// Get the display name
     fn name(&self) -> &str;

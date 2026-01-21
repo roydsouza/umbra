@@ -1,7 +1,6 @@
 use crate::state::AppState;
 use tauri::State;
 use std::sync::Arc;
-use missioncontrol_core::arti::BootstrapStatus;
 
 #[derive(serde::Serialize)]
 pub struct ArtiStatusResponse {

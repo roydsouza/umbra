@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use serde::Serialize;
-use tracing::{info, error};
+use tracing::info;
 use super::NodeStatus;
 use super::darkmatter::DarkMatterIntegration;
 use super::monero::MoneroIntegration;

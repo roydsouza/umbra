@@ -3,7 +3,7 @@
 //! Connects to Zebra (Zcash node) metrics and provides status for the dashboard.
 //! Designed to be extensible for additional crypto nodes.
 
-use super::{NodeIntegration, NodeStatus};
+use super::NodeStatus;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, warn};
 
@@ -12,6 +12,7 @@ pub struct DarkMatterIntegration {
     /// Base URL for Zebra metrics (default: http://127.0.0.1:9999)
     metrics_url: String,
     /// Whether to route through Tor (for remote nodes)
+    #[allow(dead_code)]
     use_tor: bool,
 }
 

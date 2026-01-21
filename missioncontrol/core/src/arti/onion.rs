@@ -4,7 +4,7 @@
 
 use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
-use tracing::{info, warn};
+use tracing::info;
 
 /// Onion service configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]

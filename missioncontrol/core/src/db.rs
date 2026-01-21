@@ -5,7 +5,6 @@
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 use rusqlite::{Connection, params};
-use crate::integrations::NodeIntegration;
 use tracing::info;
 
 /// Database wrapper for SQLite operations

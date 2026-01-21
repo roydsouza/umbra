@@ -4,7 +4,7 @@
 
 use super::{NodeIntegration, NodeStatus};
 use serde::{Deserialize, Serialize};
-use tracing::{debug, warn};
+use tracing::warn;
 use reqwest::Client;
 
 /// Monero integration client
@@ -32,6 +32,7 @@ struct MoneroInfoResult {
     target_height: Option<u64>,
     outgoing_connections_count: u32,
     incoming_connections_count: u32,
+    #[allow(dead_code)]
     status: String,
     version: String,
 }

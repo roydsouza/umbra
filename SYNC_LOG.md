@@ -226,3 +226,11 @@ This log maintains the context of automated work performed within the `umbra` di
 - **Action**: Performed global recursive checkpoint.
 
 
+### [2026-01-21] 14:00 - MissionControl Stabilization
+- **Project Umbra**:
+  - **Phase 6 (Stabilization)**: Resolved critical UX and stability issues.
+    - **Zombie Cleanup**: Hardened `mc` script with `trap` and `pkill` to ensure clean exits.
+    - **Reload Loop**: Fixed infinite reload loop by ignoring DB writes in `src-tauri/data`.
+    - **Styling**: Upgraded tailwind config to v4 and restored missing fonts/borders.
+    - **Crash Fix**: Resolved backend panic by spawning workers in correct async runtime.
+  - **Action**: Performed global recursive checkpoint.

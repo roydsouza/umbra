@@ -5,7 +5,7 @@
 
 use std::sync::Arc;
 use tokio::sync::broadcast;
-use tracing::{info, error, warn};
+use tracing::{info, error};
 use reqwest::Client;
 
 use crate::config::GuardianConfig;

@@ -24,16 +24,21 @@
 - [x] **Circuit Visualizer**: Interactive circuit map (React Flow).
 - [x] **Guardian Shield**: Real-time leak monitor.
 
-### Phase 4: Crypto Integration (DarkMatter)
-- [x] **Monero Client**: Implement `monero.rs` (RPC/Metrics) in `core`.
-- [x] **Crypto Manager**: Unified manager for Zcash/Monero in `core`.
-- [x] **Tauri Bridge**: Expose `get_crypto_status` command.
-- [x] **DarkMatter Page**: UI for Node Status (Sync, Peers, Height).
+### Phase 5: Stabilization & Polish
+- [x] **Launch Script**: Robust `mc` script with zombie cleanup.
+- [x] **UI Polish**: Fix Tailwind v4 Config (Fonts, Borders).
+- [x] **Reliability**: Fix Infinite Reload Loop (Ignore DB).
+- [x] **Stability**: Fix Startup Crashes (Async Runtime).
+
+### Phase 6: Production Readiness (Todo)
+- [ ] **Production Build**: Verify `cargo tauri build` works.
+- [ ] **Code Cleanup**: Remove unused fields/imports (Rust warnings).
+- [ ] **Arti Optimization**: Improve bootstrap speed/feedback.
+- [ ] **Mobile Support**: Investigate iOS/Android targets.
 
 ---
 
 ## 🎯 Active Development
-
 ### P0: Architecture Setup
 - [x] Create `missioncontrol/core` crate.
 - [x] Create `missioncontrol/tauri` app.

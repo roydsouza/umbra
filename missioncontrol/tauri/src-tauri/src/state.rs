@@ -6,8 +6,10 @@ use std::sync::Arc;
 use tokio::sync::RwLock;
 
 pub struct AppState {
+    #[allow(dead_code)]
     pub config: Config,
     pub arti: RwLock<Option<ArtiManager>>,
+    #[allow(dead_code)]
     pub db: Database,
     pub guardian: Arc<GuardianClient>,
     pub crypto: Arc<CryptoManager>,

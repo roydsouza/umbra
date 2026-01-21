@@ -36,7 +36,12 @@ pub fn run() {
 
       // Initialize Guardian
       let (guardian, mut guardian_rx) = GuardianClient::new(config.guardian.clone(), db.clone());
-      guardian.clone().spawn_worker();
+      
+      // Spawn Guardian Worker in Async Context
+      let guardian_worker = guardian.clone();
+      tauri::async_runtime::spawn(async move {
+          guardian_worker.spawn_worker();
+      });
 
       // Bridge Guardian Events to Tauri
       let app_handle = app.handle().clone();
@@ -51,7 +56,12 @@ pub fn run() {
           &config.crypto.zcash_url,
           &config.crypto.monero_url
       ));
-      crypto.clone().spawn_worker();
+      
+      // Spawn Crypto Worker in Async Context
+      let crypto_worker = crypto.clone();
+      tauri::async_runtime::spawn(async move {
+          crypto_worker.spawn_worker();
+      });
 
       // Manage State
       let state = AppState {
