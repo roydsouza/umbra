@@ -10,6 +10,8 @@ tokio = { version = "1", features = ["full"] }
 # Tor
 arti-client = { version = "0.23", features = ["full"] }
 tor-rtcompat = { version = "0.23", features = ["tokio"] }
+tor-circmgr = { version = "0.23" }
+tor-netdir = { version = "0.23" }
 
 # Utilities
 anyhow = "1"

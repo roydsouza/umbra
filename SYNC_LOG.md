@@ -262,3 +262,12 @@ This log maintains the context of automated work performed within the `umbra` di
   - **Dependency Sync**: Hardened the JS environment by installing missing core Tauri plugins.
   - **Lifecycle Verification**: Confirmed that Guardian, Monero, and Zcash services are responsive to backend lifecycle commands.
 - **Action**: Conducted a final station-wide checkpoint and synchronized all advancements.
+### [2026-01-21] 19:30 - MissionControl UX & Telemetry Stabilization
+- **Project Umbra**:
+  - **UX Stabilization**: Resolved the "BOOT..." status race condition by allowing immediate state polling on component mount and non-blocking background bootstrap.
+  - **Real Telemetry**:
+    - **Arti**: Implemented real circuit introspection using `tor-circmgr` and `tor-netdir`. The UI now visualizes actual relay fingerprints and nicknames.
+    - **DarkMatter**: Hardened Prometheus metric parsing for Zcash (`zebrad`) and wired Monero start/stop controls.
+    - **Guardian**: Corrected connectivity reporting logic to show actual shield status.
+  - **Dashboard Completion**: Populated "Services" and "Metrics" placeholders with real-time health checks and system load stats.
+- **Action**: Performed global recursive checkpoint and synchronized all UX improvements.

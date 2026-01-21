@@ -131,8 +131,8 @@ export const DarkMatter = () => {
                     status={status?.monero}
                     icon={<Lock className="text-orange-500" />}
                     color="border-orange-500"
-                    onStart={async () => { console.log('Monero start not implemented yet') }}
-                    onStop={async () => { console.log('Monero stop not implemented yet') }}
+                    onStart={() => invoke('start_monero_node')}
+                    onStop={() => invoke('stop_monero_node')}
                 />
             </div>
 

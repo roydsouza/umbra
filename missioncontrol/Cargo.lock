@@ -3247,6 +3247,8 @@ dependencies = [
  "serde_json",
  "thiserror 1.0.69",
  "tokio",
+ "tor-circmgr",
+ "tor-netdir",
  "tor-rtcompat",
  "tracing",
 ]

@@ -6,6 +6,19 @@ export function useArtiStatus() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        // Initial fetch
+        const fetchStatus = async () => {
+            try {
+                const data = await invoke<any>('get_arti_status');
+                if (data.bootstrapped) {
+                    setStatus("ready");
+                }
+            } catch (err) {
+                console.error("Initial Arti status check failed:", err);
+            }
+        };
+        fetchStatus();
+
         // Listen for ready event
         const unlistenReady = listen('arti://ready', () => {
             console.log("Arti Ready Event Received");

@@ -70,10 +70,14 @@ pub fn run() {
           crypto_worker.spawn_worker();
       });
 
+      // Initialize Arti
+      let arti_manager = missioncontrol_core::arti::ArtiManager::new().expect("Failed to initialize Arti");
+      let arti_worker = arti_manager.clone();
+
       // Manage State
       let state = AppState {
           config,
-          arti: RwLock::new(None),
+          arti: RwLock::new(Some(arti_manager)),
           db,
           guardian,
           crypto,
@@ -83,13 +87,9 @@ pub fn run() {
       // Bootstrap Arti in Background
       let handle = app.handle().clone();
       tauri::async_runtime::spawn(async move {
-          match ArtiManager::bootstrap().await {
-              Ok(manager) => {
+          match arti_worker.bootstrap().await {
+              Ok(_) => {
                   println!("✅ Arti bootstrapped successfully");
-                  if let Some(state) = handle.try_state::<Arc<AppState>>() {
-                      let mut lock = state.arti.write().await;
-                      *lock = Some(manager);
-                  }
                   let _ = handle.emit("arti://ready", ());
               }
               Err(e) => {

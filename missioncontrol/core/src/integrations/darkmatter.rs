@@ -54,28 +54,44 @@ impl DarkMatterIntegration {
             ..Default::default()
         };
         
+        let mut best_height = 0;
+        let mut target_height = 0;
+        let mut is_synced = false;
+
         for line in metrics.lines() {
             if line.starts_with('#') || line.is_empty() {
                 continue;
             }
             
             // Parse key metrics
-            if line.starts_with("zebra_state_best_block_height") {
+            if line.contains("zebra_state_best_block_height") {
                 if let Some(value) = extract_value(line) {
-                    status.block_height = Some(value as u64);
+                    best_height = value as u64;
                 }
-            } else if line.starts_with("zebra_network_peer_connections") {
+            } else if line.contains("zebra_network_peer_connections") {
                 if let Some(value) = extract_value(line) {
                     status.peers = Some(value as u32);
                 }
-            } else if line.starts_with("zebra_sync_is_synced") {
+            } else if line.contains("zebra_sync_is_synced") {
                 if let Some(value) = extract_value(line) {
-                    status.synced = value > 0.0;
+                    is_synced = value > 0.0;
+                }
+            } else if line.contains("zebra_sync_target_block_height") {
+                if let Some(value) = extract_value(line) {
+                    target_height = value as u64;
                 }
             }
         }
         
+        status.block_height = Some(best_height);
+        // If Zebra says it's synced via its internal metric, trust it.
+        // Otherwise, compare heights if we have a target.
+        status.synced = is_synced || (target_height > 0 && best_height >= target_height);
         status.version = Some("Zebra (Zcash)".to_string());
+        
+        debug!("Parsed Zebra metrics: height={}, peers={:?}, synced={}", 
+            best_height, status.peers, status.synced);
+            
         status
     }
     pub fn start_node(&self) -> Result<(), String> {

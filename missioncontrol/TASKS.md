@@ -33,6 +33,11 @@
 ## 🛡️ Defects & Issues
 - [x] **Launcher Failure**: Fixed `mc` script environment resolution and missing dependencies.
 - [x] **Graceful Exit**: `mc` script now traps signals and terminates process group on exit.
+- [ ] **ARTI Status**: Stuck on "BOOT..." or truncated label. Investigate bootstrap progress reporting.
+- [ ] **Guardian Shield Offline**: status reporting incorrect even when service is running.
+- [ ] **Circuit Metadata**: Current interactive map lacks relay info (country, IP, type).
+- [ ] **Empty Dashboard Sections**: Services, Metrics, and Integration pages are placeholders.
+- [ ] **DarkMatter Telemetry**: Missing block heights and peer counts for Zcash and Monero.
 
 ### Phase 6: Production Readiness (Todo)
 - [ ] **Production Build**: Verify `cargo tauri build` works.

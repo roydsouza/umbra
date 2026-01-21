@@ -9,6 +9,7 @@ use tor_rtcompat::PreferredRuntime;
 use tracing::{info, debug};
 
 /// Manages the embedded Arti Tor client
+#[derive(Clone)]
 pub struct ArtiManager {
     client: TorClient<PreferredRuntime>,
 }
@@ -38,37 +39,34 @@ pub struct CircuitInfo {
 }
 
 impl ArtiManager {
-    /// Bootstrap a new Arti client
-    /// 
-    /// This creates an isolated Tor client that doesn't interfere
-    /// with the external umbra/bin/arti instance.
-    pub async fn bootstrap() -> anyhow::Result<Self> {
-        info!("Creating Arti configuration...");
-        
-        // Use default config for now - can be customized later
+    /// Create a new Arti manager and start bootstrapping in the background
+    pub fn new() -> anyhow::Result<Self> {
+        info!("Initializing Arti client...");
         let config = TorClientConfig::default();
-        
-        info!("Bootstrapping Tor client (this may take 30-60 seconds)...");
-        let client = TorClient::create_bootstrapped(config).await?;
-        
-        info!("Tor client bootstrapped successfully");
+        let client = TorClient::create(config)?;
         
         Ok(Self { client })
+    }
+
+    /// Start the bootstrap process
+    pub async fn bootstrap(&self) -> anyhow::Result<()> {
+        info!("Bootstrapping Tor client...");
+        self.client.bootstrap().await?;
+        info!("Tor client bootstrapped successfully");
+        Ok(())
     }
     
     /// Get current bootstrap status
     pub fn status(&self) -> BootstrapStatus {
-        // In a real implementation, we'd query the client's bootstrap state
+        let status = self.client.bootstrap_status();
         BootstrapStatus {
-            bootstrapped: true,
-            percentage: 100,
-            message: "Connected to Tor network".to_string(),
+            bootstrapped: status.ready(),
+            percentage: (status.progress() * 100.0) as u8,
+            message: status.to_string(),
         }
     }
     
     /// Create an isolated client for a specific project
-    /// 
-    /// This ensures circuit isolation between GravityLens and DarkMatter.
     pub fn isolated_client(&self) -> TorClient<PreferredRuntime> {
         self.client.isolated_client()
     }
@@ -80,43 +78,49 @@ impl ArtiManager {
         Ok(stream)
     }
     
-    /// Get circuit count (placeholder - actual implementation needs tor-circmgr)
+    /// Get active circuit count
     pub fn circuit_count(&self) -> usize {
-        // TODO: Query actual circuit manager
-        3
+        self.get_circuits().len()
     }
 
-    /// Get active circuits (Mock implementation for UI dev)
+    /// Get active circuits with real metadata
     pub fn get_circuits(&self) -> Vec<CircuitInfo> {
-        vec![
+        let circmgr = self.client.circmgr();
+        
+        // Attempt to get the latest network directory for relay lookups
+        let netdir = self.client.dirmgr().opt_netdir();
+
+        circmgr.circuits().into_iter().map(|circ| {
+            let state = if circ.is_closing() { "Closing" } else { "Ready" };
+            
+            let path = circ.path().iter().map(|hop| {
+                let fingerprint = hop.display_relay_id().to_string();
+                let mut nickname = "Unknown".to_string();
+                let mut country = "??".to_string();
+                
+                // If we have a netdir, look up the relay's actual nickname and country
+                if let Some(nd) = &netdir {
+                    if let Some(relay) = nd.by_ids(hop) {
+                        nickname = relay.nickname().to_string();
+                        // Country code lookup usually requires geoip feature, 
+                        // but nickname is a good start.
+                    }
+                }
+
+                CircuitNode {
+                    fingerprint,
+                    nickname,
+                    country,
+                    role: "Relay".to_string(), // Simplified role
+                }
+            }).collect();
+
             CircuitInfo {
-                id: "0x01".to_string(),
-                state: "Ready".to_string(),
-                age_seconds: 154,
-                path: vec![
-                    CircuitNode { fingerprint: "A1B2".to_string(), nickname: "GuardDe".to_string(), country: "DE".to_string(), role: "Guard".to_string() },
-                    CircuitNode { fingerprint: "C3D4".to_string(), nickname: "MiddleNl".to_string(), country: "NL".to_string(), role: "Middle".to_string() },
-                    CircuitNode { fingerprint: "E5F6".to_string(), nickname: "ExitSe".to_string(), country: "SE".to_string(), role: "Exit".to_string() },
-                ]
-            },
-            CircuitInfo {
-                id: "0x02".to_string(),
-                state: "Ready".to_string(),
-                age_seconds: 89,
-                path: vec![
-                    CircuitNode { fingerprint: "G7H8".to_string(), nickname: "GuardDe".to_string(), country: "DE".to_string(), role: "Guard".to_string() },
-                    CircuitNode { fingerprint: "I9J0".to_string(), nickname: "MiddleFr".to_string(), country: "FR".to_string(), role: "Middle".to_string() },
-                    CircuitNode { fingerprint: "K1L2".to_string(), nickname: "ExitCh".to_string(), country: "CH".to_string(), role: "Exit".to_string() },
-                ]
-            },
-            CircuitInfo {
-                id: "0x03".to_string(),
-                state: "Building".to_string(),
-                age_seconds: 5,
-                path: vec![
-                    CircuitNode { fingerprint: "M3N4".to_string(), nickname: "GuardFi".to_string(), country: "FI".to_string(), role: "Guard".to_string() },
-                ]
-            },
-        ]
+                id: format!("{:?}", circ.unique_id()),
+                state: state.to_string(),
+                age_seconds: 0, // Age not easily accessible from circmgr::Circuit
+                path,
+            }
+        }).collect()
     }
 }
