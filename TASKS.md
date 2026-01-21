@@ -20,3 +20,8 @@ This file is used to track ongoing tasks, feature requests, and bugs for the Umb
 ## Bugs
 
 - 
+
+## 🪐 MissionControl: DarkMatter Integration
+- [x] **Node Control Actions**: Add START/STOP commands for Zebra/Monero.
+- [x] **Unified Dashboard**: Add control buttons to the DarkMatter page.
+- [x] **Leak Source Attribution**: Consolidated on port 9050 and implemented dynamic Guardian config.

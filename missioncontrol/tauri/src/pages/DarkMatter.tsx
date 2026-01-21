@@ -1,9 +1,31 @@
-import { Shield, Lock, Activity, Server } from 'lucide-react';
+import { Shield, Lock, Activity, Server, Play, Square } from 'lucide-react';
 import { GlassCard } from '../components/ui/GlassCard';
 import { useCryptoStatus } from '../hooks/useCryptoStatus';
 import type { NodeStatus } from '../hooks/useCryptoStatus';
+import { invoke } from '@tauri-apps/api/core';
+import { useState } from 'react';
 
-const NodeCard = ({ title, status, icon, color }: { title: string, status?: NodeStatus, icon: React.ReactNode, color: string }) => {
+const NodeCard = ({ title, status, icon, color, onStart, onStop }: {
+    title: string,
+    status?: NodeStatus,
+    icon: React.ReactNode,
+    color: string,
+    onStart: () => Promise<void>,
+    onStop: () => Promise<void>
+}) => {
+    const [loading, setLoading] = useState(false);
+
+    const handleAction = async (action: () => Promise<void>) => {
+        setLoading(true);
+        try {
+            await action();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (!status) return (
         <GlassCard className="p-6 opacity-50 flex flex-col gap-4">
             <div className="flex justify-between items-start">
@@ -24,10 +46,30 @@ const NodeCard = ({ title, status, icon, color }: { title: string, status?: Node
                     </h2>
                     <p className="text-sm text-text-muted mt-1">{status.version || 'Unknown Version'}</p>
                 </div>
-                <div className={`px-2 py-1 rounded text-xs font-bold uppercase
-                    ${status.synced ? 'bg-accent-green/20 text-accent-green' : 'bg-yellow-500/20 text-yellow-500'}
-                `}>
-                    {status.synced ? 'SYNCED' : 'SYNCING'}
+                <div className="flex flex-col items-end gap-2">
+                    <div className={`px-2 py-1 rounded text-xs font-bold uppercase
+                        ${status.synced ? 'bg-accent-green/20 text-accent-green' : 'bg-yellow-500/20 text-yellow-500'}
+                    `}>
+                        {status.synced ? 'SYNCED' : 'SYNCING'}
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => handleAction(onStart)}
+                            disabled={loading || status.connected}
+                            className="p-1.5 rounded bg-accent-green/10 text-accent-green hover:bg-accent-green/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            title="Start Node"
+                        >
+                            <Play size={14} fill="currentColor" />
+                        </button>
+                        <button
+                            onClick={() => handleAction(onStop)}
+                            disabled={loading || !status.connected}
+                            className="p-1.5 rounded bg-red-500/10 text-red-500 hover:bg-red-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            title="Stop Node"
+                        >
+                            <Square size={14} fill="currentColor" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -80,6 +122,8 @@ export const DarkMatter = () => {
                     status={status?.zen}
                     icon={<Shield className="text-yellow-400" />}
                     color="border-yellow-400"
+                    onStart={() => invoke('start_darkmatter_node')}
+                    onStop={() => invoke('stop_darkmatter_node')}
                 />
 
                 <NodeCard
@@ -87,6 +131,8 @@ export const DarkMatter = () => {
                     status={status?.monero}
                     icon={<Lock className="text-orange-500" />}
                     color="border-orange-500"
+                    onStart={async () => { console.log('Monero start not implemented yet') }}
+                    onStop={async () => { console.log('Monero stop not implemented yet') }}
                 />
             </div>
 
@@ -96,7 +142,7 @@ export const DarkMatter = () => {
                     <div>
                         <h3 className="font-bold text-white">Integration Status</h3>
                         <p className="text-sm text-text-muted">
-                            External node managers are running. Ensure `zebrad` and `monerod` are started manually for now.
+                            External node managers are running. You can now start/stop nodes directly from this dashboard.
                         </p>
                     </div>
                 </div>

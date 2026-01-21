@@ -53,4 +53,11 @@ impl CryptoManager {
             }
         });
     }
+    pub fn start_zcash(&self) -> Result<(), String> {
+        self.zcash.start_node()
+    }
+
+    pub fn stop_zcash(&self) -> Result<(), String> {
+        self.zcash.stop_node()
+    }
 }

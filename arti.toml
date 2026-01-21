@@ -5,8 +5,8 @@
 watch_configuration = true
 
 [proxy]
-# SOCKS proxy port (different from C-Tor's 9050)
-socks_listen = 9150
+# SOCKS proxy port (Consolidated to standard 9050 for C-Tor phase-out)
+socks_listen = 9050
 dns_listen = 0
 
 [logging]

@@ -234,3 +234,15 @@ This log maintains the context of automated work performed within the `umbra` di
     - **Styling**: Upgraded tailwind config to v4 and restored missing fonts/borders.
     - **Crash Fix**: Resolved backend panic by spawning workers in correct async runtime.
   - **Action**: Performed global recursive checkpoint.
+
+### [2026-01-21] 16:30 - Shadow Traffic Alignment & Hardening
+- **Project Umbra**:
+  - **Tor Alignment**: Consolidated all "Tor" traffic to **Arti** on the standard port **9050**.
+  - **Legacy Cleanup**: Disabled the legacy C-Tor launchd service (org.torproject.tor.plist) to ensure Arti has exclusive ownership of port 9050.
+  - **Guardian Dynamic Config**: Upgraded Guardian to support dynamic Tor port configuration via guardian.toml and verified attribution on port 9050.
+  - **Zebra Hardening**: 
+    - Disabled DNS bootstrap seeds in zebrad.toml to prevent leaks.
+    - Bound Zebra metrics to 127.0.0.1 only.
+    - Wrapped Zebra execution with torsocks for mandatory proxy enforcement.
+  - **MissionControl**: Integrated Start/Stop node controls for Zebra in the DarkMatter dashboard.
+- **Action**: Performed global recursive checkpoint.

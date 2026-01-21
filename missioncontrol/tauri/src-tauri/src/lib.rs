@@ -20,7 +20,9 @@ pub fn run() {
         commands::get_guardian_status,
         commands::get_system_stats,
         commands::get_circuits,
-        commands::get_crypto_status
+        commands::get_crypto_status,
+        commands::start_darkmatter_node,
+        commands::stop_darkmatter_node
     ])
     .setup(|app| {
       #[cfg(debug_assertions)]

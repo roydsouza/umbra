@@ -5,7 +5,8 @@
 
 use super::NodeStatus;
 use serde::{Deserialize, Serialize};
-use tracing::{debug, warn};
+use tracing::{debug, warn, info};
+use std::process::Command;
 
 /// DarkMatter integration for Zcash/Zebra node
 pub struct DarkMatterIntegration {
@@ -76,6 +77,43 @@ impl DarkMatterIntegration {
         
         status.version = Some("Zebra (Zcash)".to_string());
         status
+    }
+    pub fn start_node(&self) -> Result<(), String> {
+        info!("Starting zebrad via torsocks...");
+        
+        let child = Command::new("torsocks")
+            .arg("/Users/rds/antigravity/darkmatter/zebra/target/release/zebrad")
+            .arg("-c")
+            .arg("/Users/rds/antigravity/darkmatter/zebrad.toml")
+            .arg("start")
+            .spawn();
+
+        match child {
+            Ok(_) => Ok(()),
+            Err(e) => {
+                // If torsocks fails, fallback to direct run? No, user requested fix.
+                // But maybe torsocks isn't installed.
+                let err_msg = format!("Failed to spawn zebrad with torsocks: {}", e);
+                warn!("{}", err_msg);
+                Err(err_msg)
+            }
+        }
+    }
+
+    pub fn stop_node(&self) -> Result<(), String> {
+        info!("Stopping zebrad...");
+        // In M5 ecosystem, we use killall for simplicity for singleton services
+        let output = Command::new("killall")
+            .arg("zebrad")
+            .output()
+            .map_err(|e| e.to_string())?;
+
+        if output.status.success() {
+            Ok(())
+        } else {
+             // It might not be running
+             Err("Process not finding or failed to kill".to_string())
+        }
     }
 }
 

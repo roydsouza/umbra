@@ -80,3 +80,12 @@ pub async fn get_circuits(state: State<'_, Arc<AppState>>) -> Result<Vec<mission
 pub async fn get_crypto_status(state: State<'_, Arc<AppState>>) -> Result<missioncontrol_core::integrations::manager::CryptoStatus, String> {
     Ok(state.crypto.get_status().await)
 }
+#[tauri::command]
+pub async fn start_darkmatter_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+    state.crypto.start_zcash()
+}
+
+#[tauri::command]
+pub async fn stop_darkmatter_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+    state.crypto.stop_zcash()
+}
