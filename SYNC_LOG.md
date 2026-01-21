@@ -208,4 +208,9 @@ This log maintains the context of automated work performed within the `umbra` di
   - Phase 1 complete: 3-panel layout (Canon Navigator | Reader | Analysis).
   - Created comprehensive LLM continuity docs: `TASKS.md`, `COMPONENT_SPECS.md`.
 - **Action**: Performed global recursive checkpoint.
+### [2026-01-20] 20:30 - Workspace Cleanup
+- **Station**: Transformed `PORTS.md` to reflect ShadowPath (1420) and remove legacy Workstation ports.
+- **Documentation**: Propagated ShadowPath status to root `CONTENTS.md` and `README.md`.
+- **Action**: Recursive checkpoint of `pali`, `driftspace`, `darkmatter`, `strategy`.
+
 
