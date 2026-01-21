@@ -4,7 +4,7 @@
 
 use super::{NodeIntegration, NodeStatus};
 use serde::{Deserialize, Serialize};
-use tracing::warn;
+use tracing::{warn, info};
 use reqwest::Client;
 
 /// Monero integration client
@@ -107,6 +107,36 @@ impl MoneroIntegration {
                 warn!("Failed to fetch Monero info: {}", e);
                 NodeStatus::default()
             }
+        }
+    }
+
+    /// Start the Monero node via torsocks
+    pub fn start_node(&self) -> Result<(), String> {
+        info!("Starting monerod via torsocks...");
+        let child = std::process::Command::new("torsocks")
+            .arg("/Users/rds/antigravity/darkmatter/monero/src/monero/build/bin/monerod")
+            .arg("--no-igd")
+            .arg("--hide-my-port")
+            .spawn();
+
+        match child {
+            Ok(_) => Ok(()),
+            Err(e) => Err(format!("Failed to start monerod: {}", e)),
+        }
+    }
+
+    /// Stop the Monero node
+    pub fn stop_node(&self) -> Result<(), String> {
+        info!("Stopping monerod...");
+        let output = std::process::Command::new("killall")
+            .arg("monerod")
+            .output()
+            .map_err(|e| e.to_string())?;
+
+        if output.status.success() {
+            Ok(())
+        } else {
+            Err("monerod not found or failed to stop".to_string())
         }
     }
 }

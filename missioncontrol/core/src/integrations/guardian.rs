@@ -122,4 +122,31 @@ impl GuardianClient {
         
         Ok(())
     }
+
+    /// Start the Guardian service binary
+    pub fn start_service(&self) -> Result<(), String> {
+        info!("Starting Guardian service...");
+        let child = std::process::Command::new("/Users/rds/antigravity/umbra/guardian/target/debug/guardian")
+            .spawn();
+
+        match child {
+            Ok(_) => Ok(()),
+            Err(e) => Err(format!("Failed to start Guardian: {}", e)),
+        }
+    }
+
+    /// Stop the Guardian service
+    pub fn stop_service(&self) -> Result<(), String> {
+        info!("Stopping Guardian service...");
+        let output = std::process::Command::new("killall")
+            .arg("guardian")
+            .output()
+            .map_err(|e| e.to_string())?;
+
+        if output.status.success() {
+            Ok(())
+        } else {
+            Err("Guardian service not found or failed to stop".to_string())
+        }
+    }
 }

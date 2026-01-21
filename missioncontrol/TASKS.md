@@ -30,6 +30,10 @@
 - [x] **Reliability**: Fix Infinite Reload Loop (Ignore DB).
 - [x] **Stability**: Fix Startup Crashes (Async Runtime).
 
+## 🛡️ Defects & Issues
+- [x] **Launcher Failure**: Fixed `mc` script environment resolution and missing dependencies.
+- [x] **Graceful Exit**: `mc` script now traps signals and terminates process group on exit.
+
 ### Phase 6: Production Readiness (Todo)
 - [ ] **Production Build**: Verify `cargo tauri build` works.
 - [ ] **Code Cleanup**: Remove unused fields/imports (Rust warnings).

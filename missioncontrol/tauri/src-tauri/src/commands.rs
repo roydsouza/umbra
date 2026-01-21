@@ -80,12 +80,33 @@ pub async fn get_circuits(state: State<'_, Arc<AppState>>) -> Result<Vec<mission
 pub async fn get_crypto_status(state: State<'_, Arc<AppState>>) -> Result<missioncontrol_core::integrations::manager::CryptoStatus, String> {
     Ok(state.crypto.get_status().await)
 }
+
 #[tauri::command]
-pub async fn start_darkmatter_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+pub async fn start_zcash_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
     state.crypto.start_zcash()
 }
 
 #[tauri::command]
-pub async fn stop_darkmatter_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+pub async fn stop_zcash_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
     state.crypto.stop_zcash()
+}
+
+#[tauri::command]
+pub async fn start_monero_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+    state.crypto.start_monero()
+}
+
+#[tauri::command]
+pub async fn stop_monero_node(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+    state.crypto.stop_monero()
+}
+
+#[tauri::command]
+pub async fn start_guardian_service(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+    state.crypto.start_guardian()
+}
+
+#[tauri::command]
+pub async fn stop_guardian_service(state: State<'_, Arc<AppState>>) -> Result<(), String> {
+    state.crypto.stop_guardian()
 }

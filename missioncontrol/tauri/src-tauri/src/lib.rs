@@ -21,8 +21,12 @@ pub fn run() {
         commands::get_system_stats,
         commands::get_circuits,
         commands::get_crypto_status,
-        commands::start_darkmatter_node,
-        commands::stop_darkmatter_node
+        commands::start_zcash_node,
+        commands::stop_zcash_node,
+        commands::start_monero_node,
+        commands::stop_monero_node,
+        commands::start_guardian_service,
+        commands::stop_guardian_service
     ])
     .setup(|app| {
       #[cfg(debug_assertions)]
@@ -56,7 +60,8 @@ pub fn run() {
       // Initialize Crypto Manager
       let crypto = Arc::new(missioncontrol_core::integrations::manager::CryptoManager::new(
           &config.crypto.zcash_url,
-          &config.crypto.monero_url
+          &config.crypto.monero_url,
+          guardian.clone()
       ));
       
       // Spawn Crypto Worker in Async Context

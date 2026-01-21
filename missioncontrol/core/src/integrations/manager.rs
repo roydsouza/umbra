@@ -16,14 +16,16 @@ pub struct CryptoStatus {
 pub struct CryptoManager {
     zcash: DarkMatterIntegration,
     monero: MoneroIntegration,
+    guardian: Arc<crate::integrations::guardian::GuardianClient>,
     state: Arc<RwLock<CryptoStatus>>,
 }
 
 impl CryptoManager {
-    pub fn new(zcash_url: &str, monero_url: &str) -> Self {
+    pub fn new(zcash_url: &str, monero_url: &str, guardian: Arc<crate::integrations::guardian::GuardianClient>) -> Self {
         Self {
             zcash: DarkMatterIntegration::new(zcash_url, false), // TODO: Tor toggle
             monero: MoneroIntegration::new(monero_url),
+            guardian,
             state: Arc::new(RwLock::new(CryptoStatus::default())),
         }
     }
@@ -59,5 +61,21 @@ impl CryptoManager {
 
     pub fn stop_zcash(&self) -> Result<(), String> {
         self.zcash.stop_node()
+    }
+
+    pub fn start_monero(&self) -> Result<(), String> {
+        self.monero.start_node()
+    }
+
+    pub fn stop_monero(&self) -> Result<(), String> {
+        self.monero.stop_node()
+    }
+
+    pub fn start_guardian(&self) -> Result<(), String> {
+        self.guardian.start_service()
+    }
+
+    pub fn stop_guardian(&self) -> Result<(), String> {
+        self.guardian.stop_service()
     }
 }
