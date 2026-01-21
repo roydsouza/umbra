@@ -254,3 +254,11 @@ This log maintains the context of automated work performed within the `umbra` di
   - **Submodule Management**: Retired and removed the `tor/` submodule from the station.
   - **Standardisation**: Updated all documentation (`MISSION.md`, `CONTENTS.md`, `ARTI.md`, `C-TOR.md`) to reflect a 100% Arti-based architecture on port 9050.
 - **Action**: Performed final global station checkpoint.
+
+### [2026-01-21] 17:30 - MissionControl Final Stabilization
+- **Project Umbra**:
+  - **Launcher Fix**: Debugged and repaired the `mc` script environment resolution; implemented robust **Signal Trapping** and **Process Group Cleanup** (`pkill -P`) for zero-zombie exits.
+  - **CSS Optimization**: Resolved PostCSS `@import` ordering warnings in `index.css` for clean build logs.
+  - **Dependency Sync**: Hardened the JS environment by installing missing core Tauri plugins.
+  - **Lifecycle Verification**: Confirmed that Guardian, Monero, and Zcash services are responsive to backend lifecycle commands.
+- **Action**: Conducted a final station-wide checkpoint and synchronized all advancements.
