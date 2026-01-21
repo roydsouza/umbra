@@ -21,6 +21,22 @@ pub struct BootstrapStatus {
     pub message: String,
 }
 
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct CircuitNode {
+    pub fingerprint: String,
+    pub nickname: String,
+    pub country: String,
+    pub role: String, // "Guard", "Middle", "Exit"
+}
+
+#[derive(Debug, Clone, serde::Serialize)]
+pub struct CircuitInfo {
+    pub id: String,
+    pub state: String, // "Ready", "Building"
+    pub path: Vec<CircuitNode>,
+    pub age_seconds: u64,
+}
+
 impl ArtiManager {
     /// Bootstrap a new Arti client
     /// 
@@ -68,5 +84,39 @@ impl ArtiManager {
     pub fn circuit_count(&self) -> usize {
         // TODO: Query actual circuit manager
         3
+    }
+
+    /// Get active circuits (Mock implementation for UI dev)
+    pub fn get_circuits(&self) -> Vec<CircuitInfo> {
+        vec![
+            CircuitInfo {
+                id: "0x01".to_string(),
+                state: "Ready".to_string(),
+                age_seconds: 154,
+                path: vec![
+                    CircuitNode { fingerprint: "A1B2".to_string(), nickname: "GuardDe".to_string(), country: "DE".to_string(), role: "Guard".to_string() },
+                    CircuitNode { fingerprint: "C3D4".to_string(), nickname: "MiddleNl".to_string(), country: "NL".to_string(), role: "Middle".to_string() },
+                    CircuitNode { fingerprint: "E5F6".to_string(), nickname: "ExitSe".to_string(), country: "SE".to_string(), role: "Exit".to_string() },
+                ]
+            },
+            CircuitInfo {
+                id: "0x02".to_string(),
+                state: "Ready".to_string(),
+                age_seconds: 89,
+                path: vec![
+                    CircuitNode { fingerprint: "G7H8".to_string(), nickname: "GuardDe".to_string(), country: "DE".to_string(), role: "Guard".to_string() },
+                    CircuitNode { fingerprint: "I9J0".to_string(), nickname: "MiddleFr".to_string(), country: "FR".to_string(), role: "Middle".to_string() },
+                    CircuitNode { fingerprint: "K1L2".to_string(), nickname: "ExitCh".to_string(), country: "CH".to_string(), role: "Exit".to_string() },
+                ]
+            },
+            CircuitInfo {
+                id: "0x03".to_string(),
+                state: "Building".to_string(),
+                age_seconds: 5,
+                path: vec![
+                    CircuitNode { fingerprint: "M3N4".to_string(), nickname: "GuardFi".to_string(), country: "FI".to_string(), role: "Guard".to_string() },
+                ]
+            },
+        ]
     }
 }

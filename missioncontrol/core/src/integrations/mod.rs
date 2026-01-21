@@ -4,6 +4,8 @@
 
 pub mod darkmatter;
 pub mod guardian;
+pub mod monero;
+pub mod manager;
 
 use serde::Serialize;
 

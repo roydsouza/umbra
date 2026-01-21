@@ -18,7 +18,9 @@ pub fn run() {
     .invoke_handler(tauri::generate_handler![
         commands::get_arti_status,
         commands::get_guardian_status,
-        commands::get_system_stats
+        commands::get_system_stats,
+        commands::get_circuits,
+        commands::get_crypto_status
     ])
     .setup(|app| {
       #[cfg(debug_assertions)]
@@ -33,8 +35,23 @@ pub fn run() {
       let db = Database::open(&config.server.database_path).expect("Failed to open database");
 
       // Initialize Guardian
-      let (guardian, _) = GuardianClient::new(config.guardian.clone(), db.clone());
+      let (guardian, mut guardian_rx) = GuardianClient::new(config.guardian.clone(), db.clone());
       guardian.clone().spawn_worker();
+
+      // Bridge Guardian Events to Tauri
+      let app_handle = app.handle().clone();
+      tauri::async_runtime::spawn(async move {
+          while let Ok(event) = guardian_rx.recv().await {
+              let _ = app_handle.emit("guardian://leak", event);
+          }
+      });
+
+      // Initialize Crypto Manager
+      let crypto = Arc::new(missioncontrol_core::integrations::manager::CryptoManager::new(
+          &config.crypto.zcash_url,
+          &config.crypto.monero_url
+      ));
+      crypto.clone().spawn_worker();
 
       // Manage State
       let state = AppState {
@@ -42,6 +59,7 @@ pub fn run() {
           arti: RwLock::new(None),
           db,
           guardian,
+          crypto,
       };
       app.manage(Arc::new(state));
 

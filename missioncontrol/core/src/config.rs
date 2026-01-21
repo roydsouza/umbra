@@ -24,6 +24,30 @@ pub struct Config {
     /// Guardian-specific configuration
     #[serde(default)]
     pub guardian: GuardianConfig,
+
+    /// Crypto Node configuration
+    #[serde(default)]
+    pub crypto: CryptoConfig,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CryptoConfig {
+    /// URL for Zcash (Zebra) Prometheus metrics
+    #[serde(default = "default_zcash_url")]
+    pub zcash_url: String,
+
+    /// URL for Monero (monerod) JSON-RPC
+    #[serde(default = "default_monero_url")]
+    pub monero_url: String,
+}
+
+impl Default for CryptoConfig {
+    fn default() -> Self {
+        Self {
+            zcash_url: default_zcash_url(),
+            monero_url: default_monero_url(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -113,6 +137,14 @@ fn default_guardian_port() -> u16 {
 
 fn default_true() -> bool {
     true
+}
+
+fn default_zcash_url() -> String {
+    "http://127.0.0.1:9999".to_string()
+}
+
+fn default_monero_url() -> String {
+    "http://127.0.0.1:18081".to_string()
 }
 
 impl Config {

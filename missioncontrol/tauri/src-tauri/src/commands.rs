@@ -67,3 +67,17 @@ pub async fn get_system_stats(state: State<'_, Arc<AppState>>) -> Result<SystemS
         leaks_detected: leaks,
     })
 }
+
+#[tauri::command]
+pub async fn get_circuits(state: State<'_, Arc<AppState>>) -> Result<Vec<missioncontrol_core::arti::CircuitInfo>, String> {
+    let arti_lock = state.arti.read().await;
+    match &*arti_lock {
+        Some(manager) => Ok(manager.get_circuits()),
+        None => Ok(vec![]),
+    }
+}
+
+#[tauri::command]
+pub async fn get_crypto_status(state: State<'_, Arc<AppState>>) -> Result<missioncontrol_core::integrations::manager::CryptoStatus, String> {
+    Ok(state.crypto.get_status().await)
+}

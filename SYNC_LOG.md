@@ -213,12 +213,16 @@ This log maintains the context of automated work performed within the `umbra` di
 - **Documentation**: Propagated ShadowPath status to root `CONTENTS.md` and `README.md`.
 - **Action**: Recursive checkpoint of `pali`, `driftspace`, `darkmatter`, `strategy`.
 
+
 ### [2026-01-21] 14:00 - MissionControl Tauri Migration
 - **Project Umbra**:
   - Migrated **MissionControl** from Axum web server to **Tauri 2 Thick Client**.
   - Established **GravityLens** aesthetic (glassmorphism/space theme) in React/Tailwind.
   - Implemented core Rust library (`missioncontrol-core`) decoupling logic from legacy Axum.
   - Built **Home Dashboard** with real-time system stats via Tauri Commands.
+  - **Phase 3 (Circuits)**: Integrated `React Flow` for analyzing Tor circuit paths alongside `arti` client introspection.
+  - **Phase 4 (Guardian)**: Integrated `GuardianClient` with backend event bridging to a real-time "Shield" dashboard.
+  - **Phase 5 (Crypto)**: Implemented `DarkMatter` integration for Zcash (`zebrad`) and Monero (`monerod`) node status visualization.
 - **Action**: Performed global recursive checkpoint.
 
 

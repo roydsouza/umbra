@@ -16,28 +16,33 @@
 
 ### Phase 2: Core Wiring
 - [x] Refactor `ArtiManager` and `GuardianClient` into `missioncontrol-core`.
-- [ ] Implement Tauri Commands for System Status.
+- [x] Implement Tauri Commands for System Status.
 - [x] Implement Tauri Events for Real-time Data (replacing WebSockets).
 
 ### Phase 3: Feature Porting
 - [x] **Home Dashboard**: Rebuild in React.
-- [ ] **Circuit Visualizer**: Interactive circuit map (React Flow?).
-- [ ] **Guardian Shield**: Real-time leak monitor.
-- [ ] **Data Integration**: DarkMatter/Zebra metrics.
+- [x] **Circuit Visualizer**: Interactive circuit map (React Flow).
+- [x] **Guardian Shield**: Real-time leak monitor.
+
+### Phase 4: Crypto Integration (DarkMatter)
+- [x] **Monero Client**: Implement `monero.rs` (RPC/Metrics) in `core`.
+- [x] **Crypto Manager**: Unified manager for Zcash/Monero in `core`.
+- [x] **Tauri Bridge**: Expose `get_crypto_status` command.
+- [x] **DarkMatter Page**: UI for Node Status (Sync, Peers, Height).
 
 ---
 
 ## 🎯 Active Development
 
 ### P0: Architecture Setup
-- [ ] Create `missioncontrol/core` crate.
-- [ ] Create `missioncontrol/tauri` app.
-- [ ] Verify Arti bootstrap works inside Tauri `setup()`.
+- [x] Create `missioncontrol/core` crate.
+- [x] Create `missioncontrol/tauri` app.
+- [x] Verify Arti bootstrap works inside Tauri `setup()`.
 
 ### P1: UI/UX (GravityLens Theme)
-- [ ] Implement `GlassCard` component.
-- [ ] Implement `NeonBorder` effects.
-- [ ] Implement `SpaceBackground` (Canvas/CSS).
+- [x] Implement `GlassCard` component.
+- [x] Implement `NeonBorder` effects.
+- [x] Implement `SpaceBackground` (Canvas/CSS).
 
 ---
 
