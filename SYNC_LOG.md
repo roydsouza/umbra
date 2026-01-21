@@ -201,3 +201,11 @@ This log maintains the context of automated work performed within the `umbra` di
 ### [2026-01-20] 18:30 - PaliNLP Submodule Integration
 - **Project Pali**: Integrated **PaliNLP** (original) as a Git submodule in the project root to consolidate third-party NLP tools.
 - **Action**: Performed global recursive checkpoint and pushed changes to remote.
+### [2026-01-20] 20:25 - ShadowPath Genesis
+- **Project Pali**: 
+  - Deprecated `workstation/` web prototype.
+  - Initialized **ShadowPath** Tauri 2.0 desktop app with "Pali Scholar" aesthetic.
+  - Phase 1 complete: 3-panel layout (Canon Navigator | Reader | Analysis).
+  - Created comprehensive LLM continuity docs: `TASKS.md`, `COMPONENT_SPECS.md`.
+- **Action**: Performed global recursive checkpoint.
+
