@@ -18,7 +18,9 @@ This log maintains the context of automated work performed within the `missionco
 - Built Guardian Dashboard with real-time WebSocket stream relay.
 - Updated navigation and home page with Guardian status widgets.
 - Added feature request for contextual help button in `TASKS.md`.
-- **Checkpoint**: Verified service start and dashboard access.
+- **UX Synchronization**: Fixed status mismatch between Home and Guardian pages by decoupling hardcoded UI and refining backend health checks.
+- **Zebra DNS Hardening**: Installed `torsocks` and configured Zebra launch logic to use `--dns` to prevent clearnet leaks.
+- **Checkpoint**: Verified status sync; confirmed torsocks installation and port 9050 alignment.
 
 ---
 

@@ -51,9 +51,10 @@ pub async fn get_system_stats(state: State<'_, Arc<AppState>>) -> Result<SystemS
     // In a real app, track uptime properly. For now, just 0/placeholder.
     let uptime = 0; 
     
-    // Check Guardian connection by getting status (lightweight check)
+    // Check Guardian connection by getting status and checking process state
+    let guardian_running = state.guardian.is_running().await;
     let guardian_status = state.guardian.get_status().await;
-    let guardian_connected = guardian_status.is_ok();
+    let guardian_connected = guardian_running && guardian_status.is_ok();
     
     // Get recent leaks count (mocked or from db)
     // let leaks = state.db.get_recent_leaks_count().unwrap_or(0);

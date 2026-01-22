@@ -98,6 +98,7 @@ impl DarkMatterIntegration {
         info!("Starting zebrad via torsocks...");
         
         let child = Command::new("torsocks")
+            .arg("--dns")
             .arg("/Users/rds/antigravity/darkmatter/zebra/target/release/zebrad")
             .arg("-c")
             .arg("/Users/rds/antigravity/darkmatter/zebrad.toml")

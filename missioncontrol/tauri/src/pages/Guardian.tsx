@@ -56,8 +56,12 @@ export const Guardian = () => {
                         <div className={`w-3 h-3 rounded-full animate-pulse ${stats?.guardian_connected ? 'bg-accent-green' : 'bg-red-500'}`} />
                     </div>
                     <div className="flex items-center gap-2 mt-2">
-                        <span className="text-2xl font-mono font-bold">ACTIVE</span>
-                        <span className="text-xs px-2 py-1 bg-accent-green/10 text-accent-green rounded border border-accent-green/20">PROTECTED</span>
+                        <span className="text-2xl font-mono font-bold">
+                            {stats?.guardian_connected ? 'ACTIVE' : 'OFFLINE'}
+                        </span>
+                        <span className={`text-xs px-2 py-1 rounded border ${stats?.guardian_connected ? 'bg-accent-green/10 text-accent-green border-accent-green/20' : 'bg-red-500/10 text-red-500 border-red-500/20'}`}>
+                            {stats?.guardian_connected ? 'PROTECTED' : 'UNSECURED'}
+                        </span>
                     </div>
                 </GlassCard>
 

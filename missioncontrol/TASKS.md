@@ -43,6 +43,9 @@
 - [x] **Circuit Metadata**: Replaced mocks with real `tor-circmgr` introspection.
 - [x] **Empty Dashboard Sections**: Populated Services, Metrics, and Load stats.
 - [x] **DarkMatter Telemetry**: Fixed Zebra Prometheus parsing and wired Monero controls.
+- [ ] **Home vs Guardian Status Mismatch**: Home screen reports OFFLINE while Guardian tab claims ACTIVE.
+    - [x] Fix: Decouple hardcoded "ACTIVE" in `Guardian.tsx`.
+    - [ ] Fix: Sync `stats.guardian_connected` logic in `commands.rs` to include process health check.
 
 ### Reliability & Polish (Todo)
 - [ ] **GeoIP Integration**: Map relay fingerprints to actual countries (currently "??").

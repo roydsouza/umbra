@@ -4,7 +4,14 @@ This log maintains the context of automated work performed within the `umbra` di
 
 ---
 
-### [2026-01-21] 16:10 - High Availability & Mission Resilience
+### [2026-01-21] 16:40 - Station Hardening & UI Sync
+- **UX Consistency**: Resolved status mismatch between dashboard and shield pages; synchronized backend process-and-API health checks.
+- **Zebra DNS Hardening**: Enforced mandatory Tor DNS resolution for Zebra via `torsocks --dns` and disabled direct DNS seeds.
+- **Resilience Verification**: Confirmed supervisor auto-restarts work for both Arti and Guardian.
+- **Action**: Performed global station checkpoint across root and sub-decks.
+
+---
+
 - **Mission-Critical Stabilization**: 
   - Implemented **Arti Supervisor** in MissionControl with exponential backoff for auto-recovery.
   - Implemented **Dual-Layer Guardian Resilience**: Internal supervisor in `main.rs` and external process monitor in MissionControl.
