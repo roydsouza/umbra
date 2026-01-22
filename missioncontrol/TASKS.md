@@ -1,81 +1,76 @@
 # Tasks: MissionControl
 
 > [!IMPORTANT]
-> **STRATEGY SHIFT**: MissionControl is migrating to a **Tauri 2 Thick Client**. 
-> All Axum-specific web server tasks are DEPRECATED unless critical for the migration.
+> For architecture details and integration specs, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
-## 🚀 Tauri Migration Roadmap
+## Current Sprint: Penumbra Integration & UI Fixes
 
-### Phase 1: Foundation
-- [x] Initialize `missioncontrol-tauri` (Tauri 2 + React + Vite + Tailwind).
-- [x] Port "GravityLens" Theme (CSS to Tailwind config).
-- [x] Establish "App Shell" (Sidebar, Header, Main Layout).
-- [x] Configure `missioncontrol-core` library structure.
+### P0: Penumbra DNS Integration
+- [ ] **Create `PenumbraClient`** in `core/src/integrations/penumbra.rs`
+    - Connect to `http://127.0.0.1:9110/status` for health check.
+    - Implement `start_service()` / `stop_service()` process control.
+    - (Future) WebSocket stream for real-time DNS queries.
+- [ ] **Add Tauri Commands** in `src-tauri/src/commands.rs`:
+    - `get_penumbra_status` — returns DNS query count, Arti connectivity.
+    - `start_penumbra_service` — launches Penumbra process.
+    - `stop_penumbra_service` — kills Penumbra process.
+- [ ] **Create `Penumbra.tsx` Page**:
+    - DNS Privacy status card (similar to Guardian).
+    - Query count display.
+    - Start/Stop controls.
+- [ ] **Update Dashboard.tsx**:
+    - Add "Penumbra DNS" to Station Services list.
+    - Add Penumbra status to quick stats row.
+- [ ] **Update `App.tsx` Router**:
+    - Add `/penumbra` route.
+    - Add sidebar navigation item.
 
-### Phase 2: Core Wiring
-- [x] Refactor `ArtiManager` and `GuardianClient` into `missioncontrol-core`.
-- [x] Implement Tauri Commands for System Status.
-- [x] Implement Tauri Events for Real-time Data (replacing WebSockets).
+### P1: Dashboard Real Metrics
+- [ ] **Fix Hardcoded System Metrics** in `Dashboard.tsx:113-115`:
+    - Replace static CPU/MEM/NET (24%, 68%, 12%) with real values.
+    - Implement `get_system_metrics` Tauri command using `sysinfo` crate.
+- [ ] **Create `useSystemMetrics` Hook**:
+    - Poll backend every 5 seconds.
+    - Return `{ cpu: number, memory: number, network: number }`.
 
-### Phase 3: Feature Porting
-- [x] **Home Dashboard**: Rebuild in React.
-- [x] **Circuit Visualizer**: Interactive circuit map (React Flow).
-- [x] **Guardian Shield**: Real-time leak monitor.
+### P2: Guardian UI Controls
+- [ ] **Add Service Controls to `Guardian.tsx`**:
+    - Start/Stop/Restart buttons.
+    - Wire to existing `start_guardian_service` / `stop_guardian_service` commands.
+- [ ] **Sync Status Logic**:
+    - Ensure `stats.guardian_connected` in Dashboard matches Guardian page status.
+    - Reference: [Guardian ARCHITECTURE.md](../guardian/ARCHITECTURE.md) for API spec.
 
-### Phase 5: Stabilization & Polish
-- [x] **Launch Script**: Robust `mc` script with zombie cleanup.
-- [x] **UI Polish**: Fix Tailwind v4 Config (Fonts, Borders).
-- [x] **Reliability**: Fix Infinite Reload Loop (Ignore DB).
-- [x] **Stability**: Fix Startup Crashes (Async Runtime).
+---
 
-### Phase 6: High Availability & Resilience
-- [x] **Arti Supervisor**: Background loop with backoff for Tor reliability.
-- [x] **Guardian Supervisor**: Process monitoring and auto-restart for the Shield.
-- [x] **Documentation**: Created `ARTI.md` and updated `Walkthrough`.
+## Backlog
 
-## 🛡️ Defects & Issues
-- [x] **Launcher Failure**: Fixed `mc` script environment resolution and missing dependencies.
-- [x] **Graceful Exit**: `mc` script now traps signals and terminates process group on exit.
-- [x] **ARTI Status**: Fixed race condition in `useArtiStatus` and implemented non-blocking bootstrap.
-- [x] **Guardian Shield Offline**: Fixed status reporting and verified service connectivity.
-- [x] **Circuit Metadata**: Replaced mocks with real `tor-circmgr` introspection.
-- [x] **Empty Dashboard Sections**: Populated Services, Metrics, and Load stats.
-- [x] **DarkMatter Telemetry**: Fixed Zebra Prometheus parsing and wired Monero controls.
-- [ ] **Home vs Guardian Status Mismatch**: Home screen reports OFFLINE while Guardian tab claims ACTIVE.
-    - [x] Fix: Decouple hardcoded "ACTIVE" in `Guardian.tsx`.
-    - [ ] Fix: Sync `stats.guardian_connected` logic in `commands.rs` to include process health check.
+### Observability
+- [ ] **Unified Log Viewer**: Create a page that streams logs from Arti, Guardian, and Penumbra.
+- [ ] **GeoIP Integration**: Map Tor relay fingerprints to actual countries (currently "??").
 
-### Reliability & Polish (Todo)
-- [ ] **GeoIP Integration**: Map relay fingerprints to actual countries (currently "??").
-- [ ] **Advanced Circuit Tracking**: Track circuit age and detailed usage (bandwidth per circuit).
-- [ ] **Service Heartbeat**: Add more robust error states for offline services (e.g., clickable "Fix" buttons).
-- [ ] **Log Stream Consolidation**: Create a unified log viewer for Arti, Guardian, and Nodes.
-
-### Phase 6: Production Readiness (Todo)
+### Production Readiness
 - [ ] **Production Build**: Verify `cargo tauri build` works.
 - [ ] **Code Cleanup**: Remove unused fields/imports (Rust warnings).
-- [ ] **Arti Optimization**: Improve bootstrap speed/feedback.
-- [ ] **Mobile Support**: Investigate iOS/Android targets.
+- [ ] **Error States**: Add clickable "Fix" buttons for offline services.
 
 ---
 
-## 🎯 Active Development
-### P0: Architecture Setup
-- [x] Create `missioncontrol/core` crate.
-- [x] Create `missioncontrol/tauri` app.
-- [x] Verify Arti bootstrap works inside Tauri `setup()`.
+## Completed
 
-### P1: UI/UX (GravityLens Theme)
-- [x] Implement `GlassCard` component.
-- [x] Implement `NeonBorder` effects.
-- [x] Implement `SpaceBackground` (Canvas/CSS).
+- [x] Tauri 2 Migration (Phase 1-3)
+- [x] GravityLens Theme (GlassCard, NeonBorder, SpaceBackground)
+- [x] ArtiManager with Supervisor
+- [x] GuardianClient with WebSocket Events
+- [x] CryptoManager (Zebra, Monero)
+- [x] Circuit Visualizer (React Flow)
+- [x] Launch Script (`mc`) with Zombie Cleanup
 
 ---
 
-## 🧊 Icebox (Legacy Axum Tasks)
-*Protected for reference, but likely won't be implemented in Axum version.*
-- [ ] Onion Service CRUD (Axum HTML).
-- [ ] Alerting System (Axum).
-- [ ] Log Viewer (Axum).
+## References
+-   [ARCHITECTURE.md](ARCHITECTURE.md) — Technical design, integration specs, IPC commands.
+-   [Guardian ARCHITECTURE.md](../guardian/ARCHITECTURE.md) — Guardian API spec.
+-   [Penumbra ARCHITECTURE.md](../penumbra/ARCHITECTURE.md) — Penumbra API spec (Phase 3).

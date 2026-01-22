@@ -1,115 +1,148 @@
-# MissionControl: High-Level Architecture
+# MissionControl Architecture
 
-This document outlines the architecture for the MissionControl command center. The design prioritizes security, performance, modularity, and integration with the Umbra ecosystem's backend services.
+This document describes the **current** technical architecture of MissionControl, the unified command center for the Umbra ecosystem. It serves as the canonical reference for design and implementation.
 
-## 1. Core Components
+> [!IMPORTANT]
+> MissionControl has migrated from Axum web server to **Tauri 2 Thick Client**. Legacy Axum documentation is archived in `legacy/`.
 
-The system is composed of multiple logical components, designed to be self-contained and modular.
+---
 
-### Frontend (User Interface)
-- **Axum Web Server (`axum`):** Serves the web UI, handles HTTP requests, and manages WebSocket connections for real-time updates.
+## High-Level Overview
 
-### Backend Services (Integrated)
-1. **Arti Client (`arti-client`):** The **sole** bridge to the Tor network. Responsible for establishing connections, launching Onion Services, and routing requests.
-2. **Guardian Service:** Headless network leak detector running on `127.0.0.1:9109`. MissionControl consumes its API for real-time leak monitoring and policy configuration.
-3. **DarkMatter Module:** Integrates with crypto nodes (Zebra, Monero) for blockchain metrics.
-
-### Service Logic
-- Core business logic for aggregating data from Arti, Guardian, and DarkMatter into a unified dashboard.
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           User Device                                        │
-│   ┌─────────────┐                                                           │
-│   │ Tor Browser │ ──────────────► Tor Network ──────────────┐               │
-│   └─────────────┘                                           │               │
-└─────────────────────────────────────────────────────────────┼───────────────┘
-                                                              │
-┌─────────────────────────────────────────────────────────────▼───────────────┐
-│                    Host Machine (EventHorizon M5)                            │
-│                                                                              │
-│   ┌──────────────────────────────────────────────────────────────────────┐  │
-│   │                    MissionControl Process                             │  │
-│   │  ┌────────────┐    ┌──────────────┐    ┌─────────────────────────┐   │  │
-│   │  │ Arti Client│◄──►│ Axum Server  │◄──►│    Service Logic        │   │  │
-│   │  │ (Tor/Onion)│    │ (Web UI)     │    │ (Dashboard aggregation) │   │  │
-│   │  └────────────┘    └──────────────┘    └───────────┬─────────────┘   │  │
-│   └────────────────────────────────────────────────────┼─────────────────┘  │
-│                                                        │                     │
-│   ┌────────────────────────────────────────────────────┼─────────────────┐  │
-│   │                    Integrated Backend Services     │                  │  │
-│   │  ┌─────────────────┐  ┌──────────────────────────┐ │                  │  │
-│   │  │ Guardian        │  │ DarkMatter Nodes         │◄┘                  │  │
-│   │  │ 127.0.0.1:9109  │  │ zebrad, monerod          │                    │  │
-│   │  │ (Leak Detector) │  │ (Prometheus metrics)     │                    │  │
-│   │  └─────────────────┘  └──────────────────────────┘                    │  │
-│   └───────────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph MissionControl App (Tauri 2)
+        A[React Frontend] --> B[Tauri Bridge]
+        B --> C[Rust Backend]
+    end
+    subgraph Core Library (missioncontrol-core)
+        C --> D[ArtiManager]
+        C --> E[GuardianClient]
+        C --> F[CryptoManager]
+        C --> G[PenumbraClient - TODO]
+    end
+    subgraph Umbra Services
+        D --> H[Arti Tor Client :9050]
+        E --> I[Guardian Shield :9109]
+        G --> J[Penumbra DNS :9110]
+    end
+    subgraph DarkMatter Services
+        F --> K[Zebra/Zcash :9999]
+        F --> L[Monero :18081]
+    end
 ```
 
-### Guardian Integration Flow
-1. MissionControl's Service Logic connects to Guardian's HTTP API (`127.0.0.1:9109`).
-2. Fetches current status via `GET /status`.
-3. Establishes WebSocket connection to `/stream` for real-time leak events.
-4. Displays events on the `/guardian` page.
-5. Policy changes from UI are pushed via `POST /config`.
+---
 
-## 2. Technical Stack
+## Application Structure
 
-*   **Language:** Rust (Stable)
-*   **Async Runtime:** `tokio`
-*   **Web Framework:** `axum`
-*   **Tor Integration:** `arti-client`
-*   **Serialization:** `serde`
-*   **HTTP Utilities:** `tower-http` (for header stripping and static file serving)
-
-## 3. "Zero-Leak" Architectural Principles
-
-*   **Strict Localhost Binding:** The Axum server will be configured to bind *only* to `127.0.0.1`. It will be impossible to access the web service from the local network or any interface other than the loopback, which Arti will use.
-*   **Header Stripping Middleware:** A `tower-http` layer will be implemented to intercept all outgoing responses and remove identifying headers like `Server` and `Date`. This mitigates server fingerprinting.
-*   **Self-Contained Assets:** All CSS and JavaScript will be served directly by the Axum server. No third-party CDNs or external font providers will be used, preventing any client-side IP leakage.
-
-## 4. Proposed `main.rs` Structure
-
-```rust,ignore
-use arti_client::{TorClient, TorClientConfig};
-use axum::{routing::get, Router};
-use std::net::SocketAddr;
-use tokio::net::TcpListener;
-
-// Main entry point
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 1. Initialize Arti Tor Client
-    // let config = TorClientConfig::default();
-    // let tor_client = TorClient::create_bootstrapped(config).await?;
-
-    // 2. Launch the Onion Service
-    // let (onion_service, stream) = tor_client.launch_onion_service()?;
-    // // The `stream` is a stream of incoming connections from the Tor network.
-
-    // 3. Define the Axum Application
-    let app = Router::new()
-        .route("/", get(handler_root))
-        .route("/metrics", get(handler_metrics));
-        // Add header stripping middleware here
-
-    // 4. Run the Axum Server, listening for connections from the Arti service stream
-    // This part requires a custom 'hyper' executor that can process the stream
-    // from arti_client instead of a standard TCP listener.
-    // Research into `axum::serve` with a custom connection stream is needed.
-
-    println!("MissionControl service running at: [onion_address].onion");
-
-    Ok(())
-}
-
-// --- Axum Handlers ---
-async fn handler_root() -> &'static str {
-    "Welcome to MissionControl"
-}
-
-async fn handler_metrics() -> &'static str {
-    "System Metrics Placeholder"
-}
 ```
-*Note: The integration between `arti-client`'s connection stream and `axum`'s server is a key research point. It may involve using `hyper` directly or a custom `Accept` implementation.*
+missioncontrol/
+├── tauri/                    # Tauri 2 Desktop App
+│   ├── src/                  # React Frontend
+│   │   ├── pages/            # Dashboard, Circuits, Guardian, DarkMatter
+│   │   ├── components/       # GlassCard, Layout, etc.
+│   │   └── hooks/            # useArtiStatus, useGuardianEvents, etc.
+│   └── src-tauri/            # Rust Backend
+│       ├── src/lib.rs        # App setup, supervisors, state
+│       ├── src/commands.rs   # Tauri Commands (IPC)
+│       └── src/state.rs      # AppState struct
+├── core/                     # Shared Rust Library
+│   ├── src/arti/             # ArtiManager
+│   ├── src/integrations/     # Guardian, DarkMatter, (Penumbra TODO)
+│   └── src/db.rs             # SQLite persistence
+└── legacy/                   # Archived Axum implementation
+```
+
+---
+
+## Frontend Pages
+
+| Page | Component | Data Source | Status |
+|:---|:---|:---|:---|
+| Dashboard | `Dashboard.tsx` | All hooks aggregated | ⚠️ Hardcoded metrics |
+| Circuits | `Circuits.tsx` | `get_circuits` command | ✅ Working |
+| Guardian | `Guardian.tsx` | `useGuardianEvents` hook | ⚠️ Missing controls |
+| DarkMatter | `DarkMatter.tsx` | `useCryptoStatus` hook | ✅ Working |
+| **Penumbra** | *Not implemented* | — | ❌ Missing |
+
+---
+
+## Backend Integrations
+
+### ArtiManager (`core/src/arti/`)
+-   **Purpose**: Bootstrap and monitor the Tor connection.
+-   **Supervisor**: Exponential backoff restart loop in `lib.rs`.
+-   **Events**: `arti://ready`, `arti://error`.
+
+### GuardianClient (`core/src/integrations/guardian.rs`)
+-   **Purpose**: Connect to Guardian Shield API.
+-   **API**: `http://127.0.0.1:9109`
+-   **Features**:
+    -   `GET /status` for health check.
+    -   WebSocket `/stream` for real-time leak events.
+    -   Start/stop service control.
+-   **Supervisor**: Process monitor with auto-restart.
+-   **Events**: `guardian://leak`.
+
+### CryptoManager (`core/src/integrations/manager.rs`)
+-   **Purpose**: Monitor DarkMatter nodes (Zebra, Monero).
+-   **Metrics**: Prometheus scraping from Zebra `:9999`.
+
+### PenumbraClient (`core/src/integrations/penumbra.rs`) — **TODO**
+-   **Purpose**: Connect to Penumbra DNS service.
+-   **API**: `http://127.0.0.1:9110` (when Phase 3 implemented)
+-   **Features** (Planned):
+    -   `GET /status` for health check (query count, Arti connectivity).
+    -   Start/stop service control.
+    -   Real-time DNS query stream (future).
+
+---
+
+## Known Issues & Gaps
+
+### UI Issues
+| Issue | Component | Description |
+|:---|:---|:---|
+| Hardcoded Metrics | `Dashboard.tsx:113-115` | CPU/MEM/NET values are static (24%, 68%, 12%) |
+| Missing Controls | `Guardian.tsx` | No start/stop/restart buttons |
+| Status Mismatch | Dashboard vs Guardian | Different logic for `guardian_connected` |
+
+### Integration Gaps
+| Gap | Priority | Description |
+|:---|:---|:---|
+| Penumbra | P1 | No integration exists — need `PenumbraClient` |
+| Real System Metrics | P2 | Dashboard shows hardcoded CPU/MEM/NET |
+| Guardian Controls | P2 | UI has no way to start/stop Guardian |
+| Log Viewer | P3 | No unified log stream for Arti/Guardian/Penumbra |
+
+---
+
+## Tauri IPC Commands
+
+| Command | Description | Status |
+|:---|:---|:---|
+| `get_arti_status` | Arti bootstrap state, circuit count | ✅ |
+| `get_guardian_status` | Guardian connectivity, leak count | ✅ |
+| `get_system_stats` | Aggregated service health | ⚠️ Partial |
+| `get_circuits` | Active Tor circuit paths | ✅ |
+| `get_crypto_status` | Zebra/Monero node status | ✅ |
+| `start_guardian_service` | Launch Guardian process | ✅ |
+| `stop_guardian_service` | Kill Guardian process | ✅ |
+| `get_penumbra_status` | Penumbra DNS health | ❌ TODO |
+| `start_penumbra_service` | Launch Penumbra process | ❌ TODO |
+| `stop_penumbra_service` | Kill Penumbra process | ❌ TODO |
+
+---
+
+## Technology Stack
+
+| Component | Crate / Framework |
+|:---|:---|
+| Desktop Framework | Tauri 2.0 |
+| Frontend | React 18, Vite, Tailwind CSS |
+| Rust Runtime | Tokio |
+| Tor Client | `arti-client` |
+| HTTP Client | `reqwest` |
+| Database | SQLite (`rusqlite`) |
+| Serialization | `serde`, `serde_json` |

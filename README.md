@@ -17,6 +17,7 @@ We are transitioning the station's cloak from legacy tech to the future:
 ## 📂 The Cloak's Components
 
 - **`missioncontrol/`**: The administration deck. Our high-level interface for managing hidden services and privacy parameters.
+- **`penumbra/`**: The DNS Privacy subsystem. Intercepts and tunnels all DNS traffic through Arti.
 - **`arti/`**: The Arti source and build environment (Git Submodule).
 - **`tor/`**: The legacy C-Tor source (Git Submodule).
 - **`keys/`**: The Station's heart. Contains our private identities (**Strictly Confidential**).

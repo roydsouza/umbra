@@ -7,3 +7,6 @@
 [submodule "guardian"]
 	path = guardian
 	url = https://github.com/roydsouza/guardian
+[submodule "penumbra"]
+	path = penumbra
+	url = https://github.com/roydsouza/penumbra.git

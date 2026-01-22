@@ -303,3 +303,10 @@
     - **Data Cleaning Ritual**: Overhauled the XML import pipeline with a two-pass "Brute Force" cleaner to purge internal VRI markup (édition marks, edition codes) from the canonical text.
 - **Defect Tracking**: Initialized `DEFECTS.md` as a permanent ledger for tracking regressions (Centered text, state-management bugs) and Phase 5 goals (English translations).
 - **Action**: Performed final global station checkpoint and verified documentation alignment.
+
+### [2026-01-22] Penumbra Resilience & Automation
+- **Project Penumbra**:
+    - **Refactor**: Restructured into library/binary split for testability.
+    - **Resilience**: Implemented moka caching, Fail-Mode logic, and Health Checks.
+    - **Automation**: Added operational scripts (health, status) and tests.
+- **Action**: Performed global recursive checkpoint.

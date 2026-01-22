@@ -4,6 +4,17 @@ This log maintains the context of automated work performed within the `missionco
 
 ---
 
+### Session: 2026-01-22 (Documentation Overhaul)
+- **ARCHITECTURE.md**: Completely rewrote to reflect Tauri 2 architecture (was outdated Axum docs). Added Mermaid diagrams, page status table, integration specs, known issues, and IPC command reference.
+- **TASKS.md**: Restructured with Penumbra integration as P0, real metrics as P1, Guardian controls as P2.
+- **Root Cause**: MissionControl lacked updated architecture docs after Tauri migration, causing confusion about current state.
+- **Gaps Identified**:
+    - No Penumbra integration exists.
+    - Dashboard metrics are hardcoded (CPU 24%, MEM 68%, NET 12%).
+    - Guardian page missing start/stop controls.
+
+---
+
 ### Session: 2026-01-21 (UX Stabilization & Resilience)
 - **Defect Resolution**: Fixed "BOOT..." status persistence and real-time circuit introspection (Relay names/Countries).
 - **Embedded Arti Stabilization**: Resolved runtime initialization panics in Tauri.
