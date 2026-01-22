@@ -1,6 +1,10 @@
 # Umbra Project Sync Log
 
-This log maintains the context of automated work performed within the `umbra` directory.
+### [2026-01-22] 07:50 - Guardian Persistence & Hardening
+- **Guardian Service**: Successfully transitioned Guardian to a persistent macOS **LaunchDaemon** with "always-on" self-healing (KeepAlive).
+- **Network Resilience**: Resolved interface detection and Linktype parsing bugs to ensure robust leak detection on WiFi (en0) and Loopback.
+- **Observability**: Implemented **ADMIN.md** and synchronized the full documentation suite; added features for circular logging and event throttling.
+- **Action**: Performed global station checkpoint across root and sub-decks.
 
 ---
 
