@@ -288,3 +288,14 @@ This log maintains the context of automated work performed within the `umbra` di
     - **Guardian**: Corrected connectivity reporting logic to show actual shield status.
   - **Dashboard Completion**: Populated "Services" and "Metrics" placeholders with real-time health checks and system load stats.
 - **Action**: Performed global recursive checkpoint and synchronized all UX improvements.
+
+---
+
+### [2026-01-21] 20:45 - ShadowPath NLP Integration & Stabilization
+- **Project Pali**: 
+    - **Data Layer Sovereignty**: Stabilized the Tipiṭaka data by relocating `tipi.db` to a project-local folder (`pali/data/`) and creating a formal symlink. This prevents data loss during Tauri app resets.
+    - **Pāḷi NLP Native Port**: successfully implemented a native Rust **Sandhi Splitter** and integrated **DPD (Digital Pali Dictionary)** lookup directly into the Tauri backend.
+    - **Fuzzy Dictionary Lookup**: Implemented a "Stemming Fallback" in the Rust dictionary engine to handle inflected Pāḷi forms (e.g., `paṭhamapaṇṇāsakam` -> `paṭhamapaṇṇāsaka`).
+    - **Data Cleaning Ritual**: Overhauled the XML import pipeline with a two-pass "Brute Force" cleaner to purge internal VRI markup (édition marks, edition codes) from the canonical text.
+- **Defect Tracking**: Initialized `DEFECTS.md` as a permanent ledger for tracking regressions (Centered text, state-management bugs) and Phase 5 goals (English translations).
+- **Action**: Performed final global station checkpoint and verified documentation alignment.
