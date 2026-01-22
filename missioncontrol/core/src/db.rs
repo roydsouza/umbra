@@ -115,7 +115,7 @@ impl Database {
             "SELECT timestamp, value FROM metrics WHERE metric_type = ?1 ORDER BY timestamp DESC LIMIT ?2"
         )?;
         
-        let rows = stmt.query_map(params![metric_type, limit], |row| {
+        let rows = stmt.query_map(params![metric_type, limit as i64], |row| {
             Ok(MetricPoint {
                 timestamp: row.get(0)?,
                 value: row.get(1)?,
@@ -161,7 +161,7 @@ impl Database {
             FROM leak_events ORDER BY timestamp DESC LIMIT ?1"#
         )?;
 
-        let rows = stmt.query_map(params![limit], |row| {
+        let rows = stmt.query_map(params![limit as i64], |row| {
             Ok(LeakEvent {
                 id: row.get(0)?,
                 timestamp: row.get(1)?,

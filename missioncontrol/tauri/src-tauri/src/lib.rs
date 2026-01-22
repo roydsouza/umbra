@@ -4,11 +4,11 @@ mod state;
 mod commands;
 
 use missioncontrol_core::{Config, Database};
-use missioncontrol_core::arti::ArtiManager;
 use missioncontrol_core::integrations::guardian::GuardianClient;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tauri::{Manager, Emitter};
+use tracing::{info, warn, error};
 use crate::state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -43,6 +43,32 @@ pub fn run() {
       // Initialize Guardian
       let (guardian, mut guardian_rx) = GuardianClient::new(config.guardian.clone(), db.clone());
       
+      // Auto-start and supervise Guardian if enabled
+      if config.guardian.enabled {
+          let guardian_supervisor = guardian.clone();
+          tauri::async_runtime::spawn(async move {
+              let mut retry_delay = std::time::Duration::from_secs(2);
+              let max_delay = std::time::Duration::from_secs(60);
+
+              loop {
+                  if !guardian_supervisor.is_running().await {
+                      warn!("Guardian Supervisor: Service not running or crashed. Attempting restart...");
+                      match guardian_supervisor.start_service().await {
+                          Ok(_) => {
+                              info!("✅ Guardian service started/restarted successfully");
+                              retry_delay = std::time::Duration::from_secs(2);
+                          }
+                          Err(e) => {
+                              error!("❌ Guardian restart failed: {}. Retrying in {:?}...", e, retry_delay);
+                              retry_delay = std::cmp::min(retry_delay * 2, max_delay);
+                          }
+                      }
+                  }
+                  tokio::time::sleep(retry_delay).await;
+              }
+          });
+      }
+      
       // Spawn Guardian Worker in Async Context
       let guardian_worker = guardian.clone();
       tauri::async_runtime::spawn(async move {
@@ -71,7 +97,9 @@ pub fn run() {
       });
 
       // Initialize Arti
-      let arti_manager = missioncontrol_core::arti::ArtiManager::new().expect("Failed to initialize Arti");
+      let arti_manager = tauri::async_runtime::block_on(async {
+          missioncontrol_core::arti::ArtiManager::new().expect("Failed to initialize Arti")
+      });
       let arti_worker = arti_manager.clone();
 
       // Manage State
@@ -84,17 +112,29 @@ pub fn run() {
       };
       app.manage(Arc::new(state));
 
-      // Bootstrap Arti in Background
+      // Bootstrap Arti with Supervisor Loop
       let handle = app.handle().clone();
       tauri::async_runtime::spawn(async move {
-          match arti_worker.bootstrap().await {
-              Ok(_) => {
-                  println!("✅ Arti bootstrapped successfully");
-                  let _ = handle.emit("arti://ready", ());
-              }
-              Err(e) => {
-                  println!("❌ Arti bootstrap failed: {}", e);
-                  let _ = handle.emit("arti://error", e.to_string());
+          let mut retry_delay = std::time::Duration::from_secs(2);
+          let max_delay = std::time::Duration::from_secs(60);
+
+          loop {
+              info!("Arti Supervisor: Attempting bootstrap...");
+              match arti_worker.bootstrap().await {
+                  Ok(_) => {
+                      info!("✅ Arti bootstrapped successfully");
+                      let _ = handle.emit("arti://ready", ());
+                      // Once bootstrapped, we stay in the loop but the bootstrap() call is done.
+                      // In a more complex setup, we'd monitor the connection.
+                      // For now, if bootstrap succeeds, we just wait a long time or exit worker.
+                      break; 
+                  }
+                  Err(e) => {
+                      error!("❌ Arti bootstrap failed: {}. Retrying in {:?}...", e, retry_delay);
+                      let _ = handle.emit("arti://error", e.to_string());
+                      tokio::time::sleep(retry_delay).await;
+                      retry_delay = std::cmp::min(retry_delay * 2, max_delay);
+                  }
               }
           }
       });

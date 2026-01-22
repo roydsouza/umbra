@@ -1,148 +1,49 @@
-# Arti (Next-Gen Rust Core)
+# Arti Administration & Monitoring
 
-This document provides a comprehensive overview of the Arti (Rust-based Tor) implementation as configured and deployed in Project Umbra.
+Arti is the next-generation Tor client implementation in Rust. This document outlines how to manage and monitor Arti within the Umbra station.
 
----
+## 1. Standalone Administration
 
-## 🏗️ Build & Installation
+When running as an independent service or during manual debugging:
 
-### Build Process
-Arti was built from the official source submodule in `umbra/arti/` specifically for the **Apple Silicon M5**.
-- **Build Tool**: Cargo (Rust package manager)
-- **Profile**: Release (optimized)
-- **Command**: `cargo build --release`
+### Logs
+Primary logs are stored in:
+`/Users/rds/antigravity/umbra/arti/var/log/arti.log` (if configured) or emitted to `stdout/stderr`.
 
-### Installation Path
-To maintain a portable and localized workspace, Arti is installed directly within the `umbra` directory:
-- **Binary**: `/Users/rds/antigravity/umbra/bin/arti`
-- **Config**: `/Users/rds/antigravity/umbra/arti.toml`
-- **Data (State)**: `/Users/rds/antigravity/umbra/var/lib/arti`
-- **Cache**: `/Users/rds/antigravity/umbra/var/cache/arti`
+### SOCKS Proxy
+By default, Arti provides a SOCKS5 proxy on:
+- **`127.0.0.1:9150`** (Preferred)
+- **`127.0.0.1:9050`** (Legacy compatibility)
 
----
-
-## 🔌 Network Ports
-
-Arti is configured to coexist with C-Tor by using the `91xx` port range:
-
-| Service | Port | Binding | Description |
-|---------|------|---------|-------------|
-| **SOCKS Proxy** | `9050` | `127.0.0.1` | Main Arti proxy (Standard Tor Port) |
-| **RPC / Control** | `9152` | `127.0.0.1` | Proposed future RPC port |
+### Manual Restart
+If running via `launchctl`:
+```bash
+launchctl kickstart -k gui/$(id -u)/org.torproject.arti
+```
 
 ---
 
-## 🔐 Identity & Keys
+## 2. Administration via MissionControl
 
-Identity keys are stored in a centralized, hierarchical structure to separate them from legacy C-Tor keys.
+MissionControl provides a unified interface for the embedded Arti instance.
 
-- **Storage Location**: `/Users/rds/antigravity/umbra/keys/arti/`
-- **Internal Link**: Symlinked into the Arti state directory at `umbra/var/lib/arti/keystore`.
-- **Permissions**: Strictly `700` (directory) and `600` (files).
+### Monitoring
+- **Dashboard**: Shows the "ARTI Status" (ONLINE/BOOT...).
+- **Circuit Map**: Real-time visualization of active paths, including relay names, countries, and status.
+- **Circuit Count**: Aggregate number of active circuits for bandwidth and connectivity health.
 
-### Onion Services
-To establish a new Hidden Service address with Arti, we add an entry to `arti.toml`:
+### Resilience (Supervisor)
+MissionControl implements an **Arti Supervisor** loop. 
+- If the embedded Arti client loses connection or fails to bootstrap, MissionControl will automatically attempt to restart it with an exponential backoff.
+- Status is broadcast to the UI as an "Error" state if the supervisor reaches a retry limit.
+
+### Configuration
+Configuration for the embedded instance is managed via:
+`~/antigravity/umbra/missioncontrol/config/missioncontrol.toml`
+
+The `[arti]` section defines the state and cache directories:
 ```toml
-[onion_services."event-horizon"]
-address_filter = "auto"
-proxy_ports = [["80", "127.0.0.1:8080"]]
+[arti]
+state_dir = "data/arti/state"
+cache_dir = "data/arti/cache"
 ```
-Once started, Arti will generate the keys in the keystore and the onion address will be accessible via the `keystore` file system.
-
----
-
-## 🤝 Coexistence with C-Tor
-
-- **Network**: Both can run simultaneously since C-Tor uses `9050` and Arti uses `9150`.
-- **Filesystem**: Configurations and binaries are separated in different folders (`/usr/local/tor-m5` vs `umbra/bin`).
-- **Identity**: Identity keys are archived separately in `umbra/keys/ctor` and `umbra/keys/arti`.
-
----
-
-## 🛠️ Administration & Monitoring
-
-### Turning On/Off
-Managed via a custom Launch Agent:
-- **Start**: `launchctl load ~/Library/LaunchAgents/org.torproject.arti.plist`
-- **Stop**: `launchctl unload ~/Library/LaunchAgents/org.torproject.arti.plist`
-- **Logs**:
-  ```bash
-  tail -f /Users/rds/antigravity/umbra/var/log/arti.log
-  ```
-
----
-
-## 📋 Logging & Monitoring
-
-### Log Locations
-- **Standard Output**: `/Users/rds/antigravity/umbra/var/log/arti.log`
-- **Error Log**: `/Users/rds/antigravity/umbra/var/log/arti.err`
-
-### Monitoring (Real-time)
-To watch Arti's progress (syncing, circuit establishment):
-```bash
-tail -f /Users/rds/antigravity/umbra/var/log/arti.log
-```
-
-### Log Rotation & Cleanup
-- **Automatic**: Configured in `arti.toml` for **daily rotation** with a retention count of 5.
-- **Manual Cleanup**:
-  ```bash
-  true > /Users/rds/antigravity/umbra/var/log/arti.log
-  ```
-
----
-
-## 💻 Integration
-
-### Network Traffic
-Configure your applications to use:
-- **Proxy**: `SOCKS5`
-- **Host**: `127.0.0.1`
-- **Port**: `9150`
-
-### Programmatic Integration (Rust)
-Arti is uniquely designed as a set of libraries. You can integrate it directly into your own Rust projects (like `darkmatter` or `gravitylens`) by adding it as a dependency:
-```toml
-[dependencies]
-arti-client = "1.9.0"
-tor-rtcompat = "1.9.0"
-tokio = { version = "1", features = ["full"] }
-```
-Example code to create a proxy-capable client:
-```rust
-let config = TorClientConfig::default();
-let client = TorClient::create_bootstrapped(config).await?;
-let stream = client.connect(("[address].onion", 80)).await?;
-```
-
----
-
-## 🔄 Upstream Tracking & Updates
-
-### Detecting Changes
-Check the status of the submodule:
-```bash
-git submodule status arti/
-```
-To check for *new* upstream versions without pulling:
-```bash
-cd umbra/arti
-git fetch origin
-git log HEAD..origin/main --oneline
-```
-
-### Proactive Notification
-- **GitHub Watch**: It is recommended to "Watch" the `arti` repository on GitLab/GitHub for Release notifications.
-- **Agent Check**: The AI assistant will check submodule status during every "Update Documentation" task.
-
-### Performing an Update
-1. **Pull**: `cd umbra/arti && git pull origin main`
-2. **Re-build**: `cargo build --release`
-3. **Commit**: `git add arti && git commit -m "Upgrade Arti to latest"`
-4. **Restart**: `killall arti` (or use launchctl)
-
-### [DECOMMISSIONED] C-Tor Transition
-Project Umbra has officially decommissioned the legacy C-based Tor node. All traffic and identity keys have been migrated to Arti.
-- **Historic Port**: 9050 (now owned by Arti)
-- **Historic Keys**: Archived in umbra/keys/ctor/

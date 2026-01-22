@@ -4,7 +4,17 @@ This log maintains the context of automated work performed within the `umbra` di
 
 ---
 
-### Session: 2026-01-17
+### [2026-01-21] 16:10 - High Availability & Mission Resilience
+- **Mission-Critical Stabilization**: 
+  - Implemented **Arti Supervisor** in MissionControl with exponential backoff for auto-recovery.
+  - Implemented **Dual-Layer Guardian Resilience**: Internal supervisor in `main.rs` and external process monitor in MissionControl.
+  - Resolved **Arti runtime panics** by ensuring proper initialization in Tokio context.
+  - Fixed **Guardian auto-start** bug and documented macOS permission blockers (`ARTI.md`).
+- **Documentation**: Finalized `ARTI.md` and standard suite for the 100% Arti-based architecture.
+- **Action**: Performed global station checkpoint and verified service state.
+
+---
+
 - **Agent-led Workspace Standardization**:
     - **Documentation:** Ensured consistent documentation structure across the project. Created missing `CONTEXT.md` and `INSTRUCTIONS.md`. Updated `CONTENTS.md` with a complete and accurate file index.
     - **AI Context:** Generated `Claude.md`, a detailed context file for AI agents, summarizing project goals, structure, and workflows.

@@ -8,10 +8,12 @@ edition = "2021"
 tokio = { version = "1", features = ["full"] }
 
 # Tor
-arti-client = { version = "0.23", features = ["full"] }
-tor-rtcompat = { version = "0.23", features = ["tokio"] }
-tor-circmgr = { version = "0.23" }
-tor-netdir = { version = "0.23" }
+# Tor
+arti-client = { path = "../../arti/crates/arti-client", version = "0.38.0", features = ["full", "experimental-api"] }
+tor-rtcompat = { path = "../../arti/crates/tor-rtcompat", version = "0.38.0", features = ["tokio"] }
+tor-circmgr = { path = "../../arti/crates/tor-circmgr", version = "0.38.0", features = ["experimental-api"] }
+tor-netdir = { path = "../../arti/crates/tor-netdir", version = "0.38.0", features = ["experimental-api"] }
+tor-linkspec = { path = "../../arti/crates/tor-linkspec", version = "0.38.0" }
 
 # Utilities
 anyhow = "1"
@@ -19,7 +21,7 @@ thiserror = "1"
 tracing = "0.1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-rusqlite = { version = "0.32", features = ["bundled"] }
+rusqlite = { version = "0.38.0", features = ["bundled"] }
 reqwest = { version = "0.12", features = ["json"] }
 figment = { version = "0.10", features = ["toml", "env"] }
 chrono = { version = "0.4", features = ["serde"] }

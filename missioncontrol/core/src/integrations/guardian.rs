@@ -17,6 +17,7 @@ pub struct GuardianClient {
     http_client: Client,
     db: Database,
     event_tx: broadcast::Sender<LeakEvent>,
+    child: tokio::sync::Mutex<Option<tokio::process::Child>>,
 }
 
 impl GuardianClient {
@@ -27,6 +28,7 @@ impl GuardianClient {
             http_client: Client::new(),
             db,
             event_tx,
+            child: tokio::sync::Mutex::new(None),
         });
         
         (client, event_rx)
@@ -124,14 +126,40 @@ impl GuardianClient {
     }
 
     /// Start the Guardian service binary
-    pub fn start_service(&self) -> Result<(), String> {
+    pub async fn start_service(&self) -> Result<(), String> {
         info!("Starting Guardian service...");
-        let child = std::process::Command::new("/Users/rds/antigravity/umbra/guardian/target/debug/guardian")
+        let mut child_lock = self.child.lock().await;
+        
+        // Kill existing if any
+        if let Some(mut old_child) = child_lock.take() {
+            let _ = old_child.kill().await;
+        }
+
+        let child = tokio::process::Command::new("/Users/rds/antigravity/umbra/guardian/target/debug/guardian")
             .spawn();
 
         match child {
-            Ok(_) => Ok(()),
+            Ok(c) => {
+                *child_lock = Some(c);
+                Ok(())
+            }
             Err(e) => Err(format!("Failed to start Guardian: {}", e)),
+        }
+    }
+
+    /// Check if the Guardian service is still running
+    pub async fn is_running(&self) -> bool {
+        let mut child_lock = self.child.lock().await;
+        if let Some(child) = child_lock.as_mut() {
+            match child.try_wait() {
+                Ok(None) => true, // Still running
+                _ => {
+                    *child_lock = None;
+                    false
+                }
+            }
+        } else {
+            false
         }
     }
 

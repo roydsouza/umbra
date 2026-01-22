@@ -30,14 +30,25 @@
 - [x] **Reliability**: Fix Infinite Reload Loop (Ignore DB).
 - [x] **Stability**: Fix Startup Crashes (Async Runtime).
 
+### Phase 6: High Availability & Resilience
+- [x] **Arti Supervisor**: Background loop with backoff for Tor reliability.
+- [x] **Guardian Supervisor**: Process monitoring and auto-restart for the Shield.
+- [x] **Documentation**: Created `ARTI.md` and updated `Walkthrough`.
+
 ## 🛡️ Defects & Issues
 - [x] **Launcher Failure**: Fixed `mc` script environment resolution and missing dependencies.
 - [x] **Graceful Exit**: `mc` script now traps signals and terminates process group on exit.
-- [ ] **ARTI Status**: Stuck on "BOOT..." or truncated label. Investigate bootstrap progress reporting.
-- [ ] **Guardian Shield Offline**: status reporting incorrect even when service is running.
-- [ ] **Circuit Metadata**: Current interactive map lacks relay info (country, IP, type).
-- [ ] **Empty Dashboard Sections**: Services, Metrics, and Integration pages are placeholders.
-- [ ] **DarkMatter Telemetry**: Missing block heights and peer counts for Zcash and Monero.
+- [x] **ARTI Status**: Fixed race condition in `useArtiStatus` and implemented non-blocking bootstrap.
+- [x] **Guardian Shield Offline**: Fixed status reporting and verified service connectivity.
+- [x] **Circuit Metadata**: Replaced mocks with real `tor-circmgr` introspection.
+- [x] **Empty Dashboard Sections**: Populated Services, Metrics, and Load stats.
+- [x] **DarkMatter Telemetry**: Fixed Zebra Prometheus parsing and wired Monero controls.
+
+### Reliability & Polish (Todo)
+- [ ] **GeoIP Integration**: Map relay fingerprints to actual countries (currently "??").
+- [ ] **Advanced Circuit Tracking**: Track circuit age and detailed usage (bandwidth per circuit).
+- [ ] **Service Heartbeat**: Add more robust error states for offline services (e.g., clickable "Fix" buttons).
+- [ ] **Log Stream Consolidation**: Create a unified log viewer for Arti, Guardian, and Nodes.
 
 ### Phase 6: Production Readiness (Todo)
 - [ ] **Production Build**: Verify `cargo tauri build` works.

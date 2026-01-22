@@ -4,9 +4,12 @@
 
 pub mod onion;
 
+
 use arti_client::{TorClient, TorClientConfig, DataStream};
 use tor_rtcompat::PreferredRuntime;
 use tracing::{info, debug};
+use tor_linkspec::HasRelayIds;
+use tor_circmgr::mgr::AbstractTunnel;
 
 /// Manages the embedded Arti Tor client
 #[derive(Clone)]
@@ -43,7 +46,9 @@ impl ArtiManager {
     pub fn new() -> anyhow::Result<Self> {
         info!("Initializing Arti client...");
         let config = TorClientConfig::default();
-        let client = TorClient::create(config)?;
+        let client = TorClient::builder()
+            .config(config)
+            .create_unbootstrapped()?;
         
         Ok(Self { client })
     }
@@ -60,8 +65,8 @@ impl ArtiManager {
     pub fn status(&self) -> BootstrapStatus {
         let status = self.client.bootstrap_status();
         BootstrapStatus {
-            bootstrapped: status.ready(),
-            percentage: (status.progress() * 100.0) as u8,
+            bootstrapped: status.ready_for_traffic(),
+            percentage: (status.as_frac() * 100.0) as u8,
             message: status.to_string(),
         }
     }
@@ -88,37 +93,41 @@ impl ArtiManager {
         let circmgr = self.client.circmgr();
         
         // Attempt to get the latest network directory for relay lookups
-        let netdir = self.client.dirmgr().opt_netdir();
+        let netdir = self.client.dirmgr().netdir(tor_netdir::Timeliness::Timely).ok();
 
         circmgr.circuits().into_iter().map(|circ| {
             let state = if circ.is_closing() { "Closing" } else { "Ready" };
             
-            let path = circ.path().iter().map(|hop| {
-                let fingerprint = hop.display_relay_id().to_string();
-                let mut nickname = "Unknown".to_string();
-                let mut country = "??".to_string();
-                
-                // If we have a netdir, look up the relay's actual nickname and country
-                if let Some(nd) = &netdir {
-                    if let Some(relay) = nd.by_ids(hop) {
-                        nickname = relay.nickname().to_string();
-                        // Country code lookup usually requires geoip feature, 
-                        // but nickname is a good start.
-                    }
-                }
+            let mut path = Vec::new();
+            if let Ok(p) = circ.single_path() {
+                path = p.iter().map(|hop| {
+                    let mut fingerprint = "Unknown".to_string();
+                    let mut nickname = "Unknown".to_string();
+                    let country = "??".to_string();
 
-                CircuitNode {
-                    fingerprint,
-                    nickname,
-                    country,
-                    role: "Relay".to_string(), // Simplified role
-                }
-            }).collect();
+                    if let Some(target) = hop.as_chan_target() {
+                        fingerprint = target.display_relay_ids().to_string();
+                        
+                        if let Some(nd) = &netdir {
+                            if let Some(relay) = nd.by_ids(target) {
+                                nickname = relay.rs().nickname().to_string();
+                            }
+                        }
+                    }
+
+                    CircuitNode {
+                        fingerprint,
+                        nickname,
+                        country,
+                        role: "Relay".to_string(),
+                    }
+                }).collect();
+            }
 
             CircuitInfo {
                 id: format!("{:?}", circ.unique_id()),
                 state: state.to_string(),
-                age_seconds: 0, // Age not easily accessible from circmgr::Circuit
+                age_seconds: 0,
                 path,
             }
         }).collect()

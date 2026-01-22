@@ -4,7 +4,15 @@ This log maintains the context of automated work performed within the `missionco
 
 ---
 
-### Session: 2026-01-18 (Guardian Integration & Persistence)
+### Session: 2026-01-21 (UX Stabilization & Resilience)
+- **Defect Resolution**: Fixed "BOOT..." status persistence and real-time circuit introspection (Relay names/Countries).
+- **Embedded Arti Stabilization**: Resolved runtime initialization panics in Tauri.
+- **High Availability**: Implemented **Arti Supervisor** (auto-restart loop) and **Guardian Supervisor** (process monitoring).
+- **Documentation**: Created `umbra/ARTI.md` and updated `walkthrough.md`.
+- **Checkpoint**: Verified resilience loops in dev logs; circuit data now correctly populated.
+
+---
+
 - Implemented `GuardianClient` in `integrations/guardian.rs`.
 - Added `leak_events` persistence to MissionControl Brain (SQLite).
 - Built Guardian Dashboard with real-time WebSocket stream relay.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, ShieldCheck, Zap, Server, Globe, Cpu } from 'lucide-react';
+import { Activity, ShieldCheck, Zap, Server, Globe } from 'lucide-react';
 import { GlassCard } from '../components/ui/GlassCard';
 import { useArtiStatus } from '../hooks/useArtiStatus';
 import { useSystemStats } from '../hooks/useSystemStats';

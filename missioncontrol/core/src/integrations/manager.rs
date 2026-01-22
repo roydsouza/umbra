@@ -71,8 +71,8 @@ impl CryptoManager {
         self.monero.stop_node()
     }
 
-    pub fn start_guardian(&self) -> Result<(), String> {
-        self.guardian.start_service()
+    pub async fn start_guardian(&self) -> Result<(), String> {
+        self.guardian.start_service().await
     }
 
     pub fn stop_guardian(&self) -> Result<(), String> {

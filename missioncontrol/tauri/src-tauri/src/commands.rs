@@ -103,7 +103,7 @@ pub async fn stop_monero_node(state: State<'_, Arc<AppState>>) -> Result<(), Str
 
 #[tauri::command]
 pub async fn start_guardian_service(state: State<'_, Arc<AppState>>) -> Result<(), String> {
-    state.crypto.start_guardian()
+    state.crypto.start_guardian().await
 }
 
 #[tauri::command]
