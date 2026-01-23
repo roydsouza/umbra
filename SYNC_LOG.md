@@ -318,3 +318,11 @@
   - Resolved the 100-segment rendering limit using `@tanstack/react-virtual`.
   - Application now handles full canonical texts and bilingual translations with high performance.
 - **Action**: Performed global station checkpoint across root and sub-decks.
+
+---
+
+### [2026-01-22] 21:20 - Station Advancement: Path Centralization
+- **Project Pali**: Successfully implemented **DEBT-002: Path Centralization**.
+  - Centralized all library and database paths into a unified `AppConfig` in Rust.
+  - Finalized Phase 5 and DEBT-001/002 cycle.
+- **Action**: Performed global station checkpoint across root and sub-decks.
