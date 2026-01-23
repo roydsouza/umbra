@@ -310,3 +310,11 @@
     - **Resilience**: Implemented moka caching, Fail-Mode logic, and Health Checks.
     - **Automation**: Added operational scripts (health, status) and tests.
 - **Action**: Performed global recursive checkpoint.
+
+---
+
+### [2026-01-22] 21:05 - Station Advancement: Pali Virtualization
+- **Project Pali**: Successfully implemented **DEBT-001: Virtualization** in ShadowPath.
+  - Resolved the 100-segment rendering limit using `@tanstack/react-virtual`.
+  - Application now handles full canonical texts and bilingual translations with high performance.
+- **Action**: Performed global station checkpoint across root and sub-decks.
