@@ -326,3 +326,26 @@
   - Centralized all library and database paths into a unified `AppConfig` in Rust.
   - Finalized Phase 5 and DEBT-001/002 cycle.
 - **Action**: Performed global station checkpoint across root and sub-decks.
+
+---
+
+### [2026-01-23] 12:55 - ShadowPath Import & Data Stabilization
+- **Project Pali**:
+  - **Import Stabilization**: Fixed "hang" at 98% (175/179) by implementing robust encoding fallback for legacy text files (e.g. `v16t.xml`).
+  - **Parsing Refactor**: Ported recursive "Text Accumulator" logic from legacy python scripts to Rust, solving "wall of text" rendering issues caused by nested formatting tags.
+  - **Data Cleaning**: Implemented strict regex cleaning to strip VRI markup codes and remove prefix numbering (e.g. "1. ") for cleaner Sutta titles.
+  - **Progress Tracking**: Hardened `lib.rs` to ensure the UI reaches completion state even if individual file imports fail.
+- **Action**: Performed global recursive checkpoint.
+
+### [2026-01-25] 19:45 - Zebra Network & Operations Overhaul
+- **Project DarkMatter**:
+  - **Tortification**:
+    - **Architecture**: Migrated Arti proxy to port **9050** (replacing C-Tor) and configured `zebrad` to run wrapped in `torsocks` via `scripts/start.sh`.
+    - **Verification**: Performed live `tshark` packet capture on `en0` during node startup. **Result: 0 DNS packets leaked**. All traffic routing through Arti confirmed.
+    - **Configuration**: Created custom `torsocks.conf` to allow localhost RPC traffic while blocking external leaks.
+  - **Operations Support**:
+    - **Logging**: Created `darkmatter/var/log` and updated `start.sh` to redirect stdout/stderr to `var/log/zebrad.log` (silent console).
+    - **Monitoring**: Created `scripts/status.sh`, a CLI dashboard querying `localhost:9999` metrics for block height and memory usage.
+    - **Wallet**: Enabled RPC on port **8232** and created `scripts/rpc-cli.sh`. Confirmed `zebrad` is node-only (no wallet). Documented `lightwalletd` + Hardware Wallet roadmap in `ZEBRA.md`.
+    - **Documentation**: Updated `PORTS.md` (Art 9050, C-Tor Deprecated) and overhauled `ZEBRA.md` with Anonymity, Wallet, and Monitoring sections.
+- **Action**: Performed global station checkpoint.

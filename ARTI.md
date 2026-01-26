@@ -1,49 +1,194 @@
-# Arti Administration & Monitoring
+# Arti Administration & Operations
 
-Arti is the next-generation Tor client implementation in Rust. This document outlines how to manage and monitor Arti within the Umbra station.
+This document defines the operational procedures for the **Arti** (Rust Tor) implementation within the Umbra station.
 
-## 1. Standalone Administration
+> [!IMPORTANT]
+> **Station Standard**: Arti is the **primary and only** Tor implementation used by Umbra.
+> - **Port**: **9050** (SOCKS5 proxy) - *Note: Changed from 9150 to match standard Tor ports.*
+> - **Config**: `~/antigravity/umbra/arti.toml`
+> - **Service**: `org.torproject.arti` (macOS LaunchAgent)
 
-When running as an independent service or during manual debugging:
+## Quick Reference
 
-### Logs
-Primary logs are stored in:
-`/Users/rds/antigravity/umbra/arti/var/log/arti.log` (if configured) or emitted to `stdout/stderr`.
+| Resource | Path/Command |
+| :--- | :--- |
+| **Binary** | `~/antigravity/umbra/bin/arti` |
+| **Configuration** | `~/antigravity/umbra/arti.toml` |
+| **Log File** | `~/antigravity/umbra/var/log/arti.log` |
+| **Port Check** | `lsof -iTCP -sTCP:LISTEN -P | grep 9050` |
+| **Service Status** | `launchctl list | grep arti` |
 
-### SOCKS Proxy
-By default, Arti provides a SOCKS5 proxy on:
-- **`127.0.0.1:9150`** (Preferred)
-- **`127.0.0.1:9050`** (Legacy compatibility)
+---
 
-### Manual Restart
-If running via `launchctl`:
+## 1. Client Configuration (Zebra, Neovim, etc.)
+
+To route applications through Arti, you must configure them to use the **SOCKS5 proxy** and, crucially, **resolve DNS remotely** through the proxy to prevent leaks.
+
+### Standard Configuration
+- **Proxy Type**: SOCKS5
+- **Host**: `127.0.0.1` (localhost)
+- **Port**: `9050`
+- **DNS**: Remote / Proxy DNS (Do NOT use local DNS)
+
+### Example: Zebra (Zcash Node)
+In your `zebrad.toml` configuration:
+```toml
+[network]
+# Route all traffic through Arti
+proxy = "127.0.0.1:9050"
+
+# Initial peer connection
+# Ensure you are connecting to peers that support Tor or use Tor-only peers if strictly required.
+```
+
+### Verification
+Always verify that your application is actually using the proxy:
+1. Start Arti.
+2. Start your application.
+3. Check for leakages (e.g., DNS queries appearing in system logs) or use `lsof` to ensure the app is ONLY connecting to localhost:9050.
+
+---
+
+## 2. Checking for Updates
+
+Arti is tracked as a Git submodule. To check for upstream releases:
+
+1. **Check Upstream**:
+   ```bash
+   cd ~/antigravity/umbra/arti
+   git fetch origin
+   git tag | sort -V | tail -n 5
+   ```
+
+> [!TIP]
+> **Automated Workflow**: This folder contains a **Skill** (`SKILL.md`) that automates this.
+> - **Just Enter**: When you explicitly open this folder with AntiGravity, it will auto-run `scripts/check_status.py`.
+> - **Auto-Analysis**: It compares versions and scans the CHANGELOG for "Security" or "Breaking" alerts.
+> - **One-Step Upgrade**: If you approve, it runs `scripts/deploy.sh`.
+
+2. **Compare**: Check currently checked-out version:
+   ```bash
+   git describe --tags
+   ```
+3. **Review Changelog**:
+   Check `umbra/arti/CHANGELOG.md` for critical security fixes or breaking changes before upgrading.
+
+---
+
+## 3. Building & Deploying
+
+To upgrade or rebuild the local Arti binary:
+
 ```bash
+# 1. Enter submodule
+cd ~/antigravity/umbra/arti
+
+# 2. Update code (if upgrading)
+git checkout arti-v1.x.x  # Replace with desired tag
+
+# 3. Build Release Binary (optimized for M5)
+cargo build --release -p arti --locked 
+
+# 4. Deploy to Station
+# Stop running service first
 launchctl kickstart -k gui/$(id -u)/org.torproject.arti
+
+# Copy binary to station bin/
+cp target/release/arti ~/antigravity/umbra/bin/arti
+
+# Verify version
+~/antigravity/umbra/bin/arti --version
 ```
 
 ---
 
-## 2. Administration via MissionControl
+## 4. Monitoring Status
 
-MissionControl provides a unified interface for the embedded Arti instance.
+You can monitor Arti through multiple layers:
 
-### Monitoring
-- **Dashboard**: Shows the "ARTI Status" (ONLINE/BOOT...).
-- **Circuit Map**: Real-time visualization of active paths, including relay names, countries, and status.
-- **Circuit Count**: Aggregate number of active circuits for bandwidth and connectivity health.
-
-### Resilience (Supervisor)
-MissionControl implements an **Arti Supervisor** loop. 
-- If the embedded Arti client loses connection or fails to bootstrap, MissionControl will automatically attempt to restart it with an exponential backoff.
-- Status is broadcast to the UI as an "Error" state if the supervisor reaches a retry limit.
-
-### Configuration
-Configuration for the embedded instance is managed via:
-`~/antigravity/umbra/missioncontrol/config/missioncontrol.toml`
-
-The `[arti]` section defines the state and cache directories:
-```toml
-[arti]
-state_dir = "data/arti/state"
-cache_dir = "data/arti/cache"
+### A. System Level (Launchd)
+Check if the service is running and its PID:
+```bash
+launchctl list | grep arti
+# Output: PID  Status  Label
+#         1234 0       org.torproject.arti
 ```
+
+### B. Logs
+Real-time log streaming:
+```bash
+tail -f ~/antigravity/umbra/var/log/arti.log
+```
+
+### C. MissionControl Dashboard
+The **Station Dashboard** connects to Arti via the control port/RPC (future) or by monitoring the process.
+- **Status**: Shows ONLINE/OFFLINE.
+- **Circuits**: Visualizes active paths through the Tor network.
+
+---
+
+## 5. Debugging
+
+If Arti fails to start or connect:
+
+1. **Check Error Logs**:
+   ```bash
+   cat ~/antigravity/umbra/var/log/arti.err
+   ```
+2. **Verbose Mode (Manual Run)**:
+   Stop the service and run manually to see debug output:
+   ```bash
+   launchctl stop org.torproject.arti
+   ~/antigravity/umbra/bin/arti -c ~/antigravity/umbra/arti.toml proxy -l debug
+   ```
+3. **Common Issues**:
+   - **Port Conflict**: Ensure no other Tor instance is on port 9150.
+   - **Clock Skew**: Tor requires accurate system time. Check date/time settings.
+   - **Permissions**: Ensure `umbra/var/` is writable.
+
+---
+
+## 6. Onion Services
+
+To configure a Hidden Service (Onion Service):
+
+1. **Edit Configuration**:
+   Open `~/antigravity/umbra/arti.toml`:
+   ```toml
+   [onion_services."my-service"]
+   # Map local port 80 to web server
+   proxy_ports = [ [ 80, "127.0.0.1:8080" ] ]
+   ```
+2. **Reload Arti**:
+   ```bash
+   launchctl kickstart -k gui/$(id -u)/org.torproject.arti
+   ```
+3. **Get Hostname**:
+   The `.onion` address is stored in the state directory:
+   ```bash
+   cat ~/antigravity/umbra/var/lib/arti/onion_services/my-service/hostname
+   ```
+
+> [!TIP]
+> **Programmatic Usage**: You can also launch onion services directly from Rust code using `arti-client`. See `umbra/arti/examples/axum/axum-hello-world` for a reference implementation.
+
+---
+
+## 7. Resilience Configuration
+
+Arti is configured to be **"Always On"** and self-healing.
+
+### Layer 1: macOS LaunchAgent
+- **File**: `~/Library/LaunchAgents/org.torproject.arti.plist`
+- **Mechanism**: `KeepAlive = true`
+- **Behavior**: If the `arti` process crashes or is killed, macOS immediately restarts it.
+
+### Layer 2: MissionControl Supervisor
+- **Component**: `MissionControl` (Tauri App)
+- **Mechanism**: Use `Arti Supervisor` logic in the backend.
+- **Behavior**: Monitors connectivity to the proxy port. If unresponsive, it can trigger alerts or attempt operational fixes (though LaunchAgent handles the process restart).
+
+### Layer 3: Configuration Hardening
+- **Config**: `umbra/arti.toml`
+- **Paths**: Uses absolute paths for logs and state to prevent CWD-dependent failures.
+- **Socks**: Binds to `127.0.0.1` to prevent external network leaks.
