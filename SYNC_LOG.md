@@ -351,4 +351,8 @@
   - **Monero Audit**:
     - **Vulnerability [DM-001]**: Confirmed critical DNS/P2P leaks on macOS M5 via `tshark` forensics. `monerod` bypasses local SOCKS proxies.
     - **Action**: documented in `DEFECTS.md` and flagged `MONERO.md` with **CAUTION**.
+- **Arti Optimization**:
+    - **Log Rotation**: Discovered `arti.err` bloat (stderr capture).
+    - **Fix**: Disabled console logging in `arti.toml` (`console="off"`) and removed `StandardErrorPath` from LaunchAgent.
+    - **Result**: Logs now strictly follow daily rotation in `arti.log`.
 - **Action**: Performed global station checkpoint.

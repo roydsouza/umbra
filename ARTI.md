@@ -133,7 +133,7 @@ If Arti fails to start or connect:
 
 1. **Check Error Logs**:
    ```bash
-   cat ~/antigravity/umbra/var/log/arti.err
+   tail -n 50 ~/antigravity/umbra/var/log/arti.log
    ```
 2. **Verbose Mode (Manual Run)**:
    Stop the service and run manually to see debug output:
