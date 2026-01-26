@@ -348,4 +348,7 @@
     - **Monitoring**: Created `scripts/status.sh`, a CLI dashboard querying `localhost:9999` metrics for block height and memory usage.
     - **Wallet**: Enabled RPC on port **8232** and created `scripts/rpc-cli.sh`. Confirmed `zebrad` is node-only (no wallet). Documented `lightwalletd` + Hardware Wallet roadmap in `ZEBRA.md`.
     - **Documentation**: Updated `PORTS.md` (Art 9050, C-Tor Deprecated) and overhauled `ZEBRA.md` with Anonymity, Wallet, and Monitoring sections.
+  - **Monero Audit**:
+    - **Vulnerability [DM-001]**: Confirmed critical DNS/P2P leaks on macOS M5 via `tshark` forensics. `monerod` bypasses local SOCKS proxies.
+    - **Action**: documented in `DEFECTS.md` and flagged `MONERO.md` with **CAUTION**.
 - **Action**: Performed global station checkpoint.
