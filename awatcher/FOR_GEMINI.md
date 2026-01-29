@@ -39,10 +39,11 @@ Both `awatcher` and `zwatcher` share ~60% identical code:
 - Terminal setup/cleanup patterns
 - State machine for `gg` binding
 
-**Recommendation**: After both applications are stable, extract shared code into a workspace crate:
+**Recommendation**: After both applications are stable, extract shared code into a workspace crate (placeholder already exists):
 ```
-~/antigravity/wormhole/tui-common/
+~/antigravity/tui-common/
 ├── Cargo.toml
+├── README.md          # Implementation plan documented
 └── src/
     ├── theme.rs       # Tokyo Night colors
     ├── log_viewer.rs  # Scrollable log widget
