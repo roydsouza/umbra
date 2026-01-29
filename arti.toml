@@ -13,7 +13,7 @@ dns_listen = 0
 console = "off"
 # Rotate logs daily and keep 5 historical copies
 files = [
-         {path = "/Users/rds/antigravity/umbra/var/log/arti.log", filter="info", rotate="daily", count=5},
+         {path = "/Users/rds/antigravity/umbra/var/log/arti.log", filter="info", rotate="daily"},
 ]
 
 [storage]

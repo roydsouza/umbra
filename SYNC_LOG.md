@@ -356,3 +356,9 @@
     - **Fix**: Disabled console logging in `arti.toml` (`console="off"`) and removed `StandardErrorPath` from LaunchAgent.
     - **Result**: Logs now strictly follow daily rotation in `arti.log`.
 - **Action**: Performed global station checkpoint.
+
+### [2026-01-28] - Station Control Upgrade (The grav CLI)
+- **Umbra Support**: Integrated Arti and Penumbra into the unified `grav` control tool. 
+- **Resilience**: Hardened the Arti LaunchAgent with persistent stdio logging and resolved configuration warnings.
+- **Port Management**: Verified and cleaned the PORTS registry, confirming 100% Arti-based traffic.
+- **Action**: Performed global recursive checkpoint across all station sub-decks (Wormhole, DarkMatter, EntropyEngines).
