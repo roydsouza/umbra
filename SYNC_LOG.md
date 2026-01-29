@@ -1,5 +1,14 @@
 # Umbra Project Sync Log
 
+### [2026-01-29] 09:55 - awatcher Phase 6 Complete
+- **awatcher TUI**: Completed all 6 phases of the Arti monitoring TUI.
+  - Core shell, Arti process monitoring, log viewer with IP scrubbing, onion services, dependent apps detection, actions/control.
+  - Fixed notification UI sizing and color scheme (TOKYO_ORANGE instead of red).
+  - Documented open issue: log file history shows old errors due to lack of timestamps.
+- **Documentation**: Created `TASKS.md` and `DEFECTS.md` in `awatcher/`.
+
+---
+
 ### [2026-01-22] 07:50 - Guardian Persistence & Hardening
 - **Guardian Service**: Successfully transitioned Guardian to a persistent macOS **LaunchDaemon** with "always-on" self-healing (KeepAlive).
 - **Network Resilience**: Resolved interface detection and Linktype parsing bugs to ensure robust leak detection on WiFi (en0) and Loopback.

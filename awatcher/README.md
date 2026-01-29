@@ -3,8 +3,8 @@
 Always-on monitoring and control TUI for Arti and the Umbra privacy layer.
 
 ## Status
-- **Phase**: Design Complete
-- **Role**: Real-time observability dashboard for Arti, onion services, and dependent applications.
+- **Phase**: Execution (Phase 6 Complete)
+- **Role**: Active TUI for real-time monitoring and control of the Umbra privacy layer.
 
 ## Quick Start
 ```bash
