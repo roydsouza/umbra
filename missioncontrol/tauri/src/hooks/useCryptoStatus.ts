@@ -13,6 +13,8 @@ export interface NodeStatus {
     block_height?: number;
     peers?: number;
     version?: string;
+    sync_percentage?: number;
+    sync_state?: string;
 }
 
 export function useCryptoStatus() {

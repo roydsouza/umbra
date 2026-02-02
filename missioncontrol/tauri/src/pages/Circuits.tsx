@@ -123,19 +123,27 @@ export const Circuits = () => {
 
     return (
         <div className="h-[calc(100vh-100px)] flex flex-col gap-4">
-            <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold flex items-center gap-2">
-                    <span className="text-accent-blue">Active Circuits</span>
-                    <span className="text-sm font-mono text-text-muted bg-white/5 px-2 py-0.5 rounded">
-                        {circuits.length} CONNECTED
-                    </span>
-                </h1>
-                <button
-                    onClick={fetchCircuits}
-                    className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm border border-glass-border transition-colors"
-                >
-                    Refresh
-                </button>
+            <div className="flex flex-col gap-2">
+                <div className="flex justify-between items-center">
+                    <h1 className="text-2xl font-bold flex items-center gap-2">
+                        <span className="text-accent-blue">Embedded Circuits (MissionControl)</span>
+                        <span className="text-sm font-mono text-text-muted bg-white/5 px-2 py-0.5 rounded">
+                            {circuits.length} CONNECTED
+                        </span>
+                    </h1>
+                    <button
+                        onClick={fetchCircuits}
+                        className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm border border-glass-border transition-colors"
+                    >
+                        Refresh
+                    </button>
+                </div>
+                {/* Disclaimer Banner */}
+                <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 p-3 rounded-lg text-xs font-mono">
+                    <strong className="block mb-1">NOTE: SYSTEM ARTI (ZEBRA) CIRCUITS HIDDEN</strong>
+                    These circuits belong to MissionControl's internal Tor client.
+                    The System Arti service (managing Zebra's traffic on port 9050) is running, but its circuit data is not yet visible here pending RPC integration.
+                </div>
             </div>
 
             <GlassCard className="flex-1 w-full overflow-hidden" hoverEffect={false}>

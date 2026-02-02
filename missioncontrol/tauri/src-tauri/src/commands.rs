@@ -20,6 +20,18 @@ pub struct SystemStats {
 
 #[tauri::command]
 pub async fn get_arti_status(state: State<'_, Arc<AppState>>) -> Result<ArtiStatusResponse, String> {
+    // Check if system Arti is running on port 9050
+    let system_arti_active = std::net::TcpStream::connect("127.0.0.1:9050").is_ok();
+
+    if system_arti_active {
+        return Ok(ArtiStatusResponse {
+            bootstrapped: true,
+            percentage: 100,
+            message: "System Service Active".to_string(),
+            circuit_count: 0, // TODO: Connect to RPC for real count
+        });
+    }
+
     let arti_lock = state.arti.read().await;
     match &*arti_lock {
         Some(manager) => {

@@ -46,12 +46,29 @@ const NodeCard = ({ title, status, icon, color, onStart, onStop }: {
                     </h2>
                     <p className="text-sm text-text-muted mt-1">{status.version || 'Unknown Version'}</p>
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex flex-col items-end gap-2 w-full">
                     <div className={`px-2 py-1 rounded text-xs font-bold uppercase
                         ${status.synced ? 'bg-accent-green/20 text-accent-green' : 'bg-yellow-500/20 text-yellow-500'}
                     `}>
                         {status.synced ? 'SYNCED' : 'SYNCING'}
                     </div>
+
+                    {/* Sync Progress Bar */}
+                    {!status.synced && typeof status.sync_percentage === 'number' && (
+                        <div className="flex flex-col items-end gap-1 mt-1">
+                            <div className="w-32 h-1.5 bg-white/10 rounded-full overflow-hidden relative group">
+                                <div
+                                    className="h-full bg-yellow-500 transition-all duration-500"
+                                    style={{ width: `${status.sync_percentage}%` }}
+                                />
+                            </div>
+                            {/* State Text */}
+                            <span className="text-[10px] font-mono text-text-muted">
+                                {status.sync_state || 'Syncing...'} ({status.sync_percentage.toFixed(1)}%)
+                            </span>
+                        </div>
+                    )}
+
                     <div className="flex gap-2">
                         <button
                             onClick={() => handleAction(onStart)}

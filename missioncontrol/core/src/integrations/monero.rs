@@ -101,6 +101,8 @@ impl MoneroIntegration {
                     block_height: Some(info.height),
                     peers: Some(info.outgoing_connections_count + info.incoming_connections_count),
                     version: Some(info.version),
+                    sync_percentage: None, // TODO: Calculate from height/target
+                    sync_state: None,
                 }
             },
             Err(e) => {

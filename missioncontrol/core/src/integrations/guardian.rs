@@ -5,8 +5,10 @@
 
 use std::sync::Arc;
 use tokio::sync::broadcast;
-use tracing::{info, error};
+use tracing::{info, error, warn};
 use reqwest::Client;
+use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
+use futures_util::StreamExt;
 
 use crate::config::GuardianConfig;
 use crate::db::{Database, LeakEvent};
@@ -58,32 +60,55 @@ impl GuardianClient {
     }
 
     /// Maintain a WebSocket connection to Guardian
+    /// Maintain a WebSocket connection to Guardian
     async fn monitor_stream(&self) -> anyhow::Result<()> {
-        info!("Connecting to Guardian WebSocket at {}:{}/stream", self.config.api_url, self.config.api_port);
-        
-        // --- REAL IMPLEMENTATION WILL GO HERE ---
-        // For now, let's simulate receiving an event every 30 seconds if enabled
+        let ws_url = format!("ws://{}:{}/stream", self.config.api_url, self.config.api_port);
+        info!("Connecting to Guardian WebSocket at {}", ws_url);
+
         loop {
-            tokio::time::sleep(tokio::time::Duration::from_secs(30)).await;
-            
-            if self.config.enabled {
-                let mock_event = LeakEvent {
-                    id: None,
-                    timestamp: None,
-                    process_name: Some("zebrad".to_string()),
-                    process_pid: Some(1234),
-                    process_path: Some("/usr/local/bin/zebrad".to_string()),
-                    dest_ip: Some("8.8.8.8".to_string()),
-                    dest_port: Some(53),
-                    severity: "CRITICAL".to_string(),
-                    event_type: Some("dns".to_string()),
-                    binary_info: None,
-                };
-                
-                if let Err(e) = self.handle_event(mock_event).await {
-                    error!("Failed to handle mock leak event: {}", e);
+            if !self.config.enabled {
+                tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+                continue;
+            }
+
+            match connect_async(&ws_url).await {
+                Ok((ws_stream, _)) => {
+                    info!("✅ Connected to Guardian stream");
+                    let (_, mut read) = ws_stream.split();
+
+                    while let Some(msg) = read.next().await {
+                        match msg {
+                            Ok(Message::Text(text)) => {
+                                match serde_json::from_str::<LeakEvent>(&text) {
+                                    Ok(event) => {
+                                        if let Err(e) = self.handle_event(event).await {
+                                            error!("Failed to handle event: {}", e);
+                                        }
+                                    }
+                                    Err(e) => warn!("Failed to parse Guardian event: {}", e),
+                                }
+                            }
+                            Ok(Message::Close(_)) => {
+                                warn!("Guardian WebSocket closed connection");
+                                break; 
+                            }
+                            Err(e) => {
+                                error!("WebSocket error: {}", e);
+                                break;
+                            }
+                            _ => {} // Ignore Ping/Pong/Binary for now
+                        }
+                    }
+                    warn!("Disconnected from Guardian. Reconnecting in 5s...");
+                }
+                Err(e) => {
+                    // Only log error if we expect it to be running (which we do if enabled)
+                    // But to avoid spamming logs if service is down, maybe backoff
+                    warn!("Failed to connect to Guardian: {}. Retrying in 5s...", e);
                 }
             }
+
+            tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
         }
     }
 

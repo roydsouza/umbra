@@ -371,3 +371,48 @@
 - **Resilience**: Hardened the Arti LaunchAgent with persistent stdio logging and resolved configuration warnings.
 - **Port Management**: Verified and cleaned the PORTS registry, confirming 100% Arti-based traffic.
 - **Action**: Performed global recursive checkpoint across all station sub-decks (Wormhole, DarkMatter, EntropyEngines).
+
+### [2026-01-30] 19:00 - MissionControl Integrity & Guardian Integration
+- **Project Umbra**:
+  - **Guardian Integration**: Replaced the "Mock" client with a real-time **WebSocket Client**. MissionControl now listens to `ws://127.0.0.1:9109/stream` and displays actual DNS leak events instantly.
+  - **Zebra Operations**:
+    - **Metric Data Integrity**: Fixed "100% Sync" false positive by switching from `checkpoint_queued_continuous_height` (Download Queue) to `sync_estimated_network_tip_height` (Network Tip).
+    - **Sync State**: Added detailed status text (e.g., "Downloading Blocks (59%)", "Verifying Checkpoints") to the syncing progress bar.
+  - **UI Refinements**:
+    - **Tab Fixes**: Implemented placeholder screens for blank tabs (`Metrics`, `Services`, `Integrations`).
+    - **Circuits Tab**: Renamed to "Embedded Circuits" to clarify that it displays MissionControl's internal Tor state, not the System Arti (Zebra) state.
+    - **Stability**: Added safer null-checking for sync percentage to prevent frontend crashes.
+- **Action**: Performed global recursive checkpoint.
+
+### [2026-02-01] 17:52 - Ergosphere Lab Reorganization
+
+**Session Summary**: Major evolution of Project Umbra into **Ergosphere Lab** — a modular Cargo Workspace for Arti and CGO research.
+
+**Changes Made**:
+1. **Directory Restructure**:
+   - Created `modules/`: `astrometrics-core`, `monitor-flow`, `network-topology`
+   - Created `labs/`: `arch-explorer`, `cgo-prototype`
+   - Created `tools/` (empty, for scripts)
+   - Moved 14 legacy items to `legacy/`
+   - Renamed `arti/` → `arti-upstream/`
+
+2. **Cargo Workspace**:
+   - Root `Cargo.toml` with 8 workspace members
+   - `exclude = ["arti-upstream"]` to avoid workspace conflicts
+   - All new crates verified with `cargo check`
+
+3. **Documentation**:
+   - Created `LAB_MANIFEST.md` with core concepts (Umbra, DarkMatter, GravityLens, Ergosphere)
+   - Preserved: DeFi intent, PQC/ZK-SNARK notes, Apple M5 specs
+
+4. **Guardian Update**:
+   - Temporarily removed `zebrad` from protected binaries (clearnet sync mode)
+
+**Next Steps** (see `TASKS.md`):
+1. Pin stable Arti version for comparison (`arti-v1.8-stable/`)
+2. Populate `arch-explorer` with call graph tracing
+3. Begin CGO protocol research in `cgo-prototype/`
+
+**Zebra Status**: Running clearnet mode (~20h), sync at ~1 blk/sec (glacially slow). See `darkmatter/zcash/GET_WELL_PLAN.md` for remediation.
+
+---

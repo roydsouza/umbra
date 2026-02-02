@@ -1,5 +1,5 @@
-[submodule "arti"]
-	path = arti
+[submodule "arti-upstream"]
+	path = arti-upstream
 	url = https://gitlab.torproject.org/tpo/core/arti.git
 
 [submodule "guardian"]
@@ -8,6 +8,3 @@
 [submodule "penumbra"]
 	path = penumbra
 	url = https://github.com/roydsouza/penumbra.git
-[submodule "mkp224o"]
-	path = mkp224o
-	url = https://github.com/cathugger/mkp224o

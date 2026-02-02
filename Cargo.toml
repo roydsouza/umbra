@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = [
+    # Production modules
+    "modules/astrometrics-core",
+    "modules/monitor-flow",
+    "modules/network-topology",
+    
+    # Lab experiments
+    "labs/arch-explorer",
+    "labs/cgo-prototype",
+    
+    # Existing services
+    "missioncontrol/core",
+    "guardian",
+    "penumbra",
+]
+exclude = [
+    # Arti has its own workspace - don't include it
+    "arti-upstream",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/roydsouza/umbra"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+tracing = "0.1"

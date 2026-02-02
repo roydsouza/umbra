@@ -1,5 +1,7 @@
 # Project Umbra: Secure & Private Communication Layer
 
+Instructions for Antigravity, Gemini, and other models: please also see CGO_NOTES.md for the Arti/CGO mission.
+
 ## 1. Vision & Purpose
 Umbra is the dedicated privacy and anonymity subsystem for the **EventHorizon** ecosystem. Its primary goal is to provide a "Shadow Layer" for all outgoing and incoming communications, ensuring metadata resistance and identity obfuscation. It serves as a shared utility for subordinate projects like **GravityLens** and **RedShift**.
 

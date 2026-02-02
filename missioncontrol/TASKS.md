@@ -57,8 +57,14 @@
 - [ ] **Error States**: Add clickable "Fix" buttons for offline services.
 
 ---
+- [ ] **Enhancement**: Add "Sync State" text (e.g., "Downloading", "Verifying") to Zebra card in DarkMatter tab.
+
+### Technical Debt
+- [ ] **Remove embedded Arti client** (Redundant with System Arti)
+- [ ] **Implement RPC client** (For Circuits Tab)
 
 ## Completed
+
 
 - [x] Tauri 2 Migration (Phase 1-3)
 - [x] GravityLens Theme (GlassCard, NeonBorder, SpaceBackground)
@@ -74,3 +80,7 @@
 -   [ARCHITECTURE.md](ARCHITECTURE.md) — Technical design, integration specs, IPC commands.
 -   [Guardian ARCHITECTURE.md](../guardian/ARCHITECTURE.md) — Guardian API spec.
 -   [Penumbra ARCHITECTURE.md](../penumbra/ARCHITECTURE.md) — Penumbra API spec (Phase 3).
+
+- [ ] **Data Integrity**: Align "Local Height" with zwatcher.
+    - User reported discrepancy between MC (Verified Height) and zwatcher.
+    - Investigate usage of `zebra_state_chain_tip_height` vs `zcash_chain_verified_block_height`.

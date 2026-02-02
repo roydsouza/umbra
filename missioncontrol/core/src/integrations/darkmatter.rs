@@ -56,7 +56,7 @@ impl DarkMatterIntegration {
         
         let mut best_height = 0;
         let mut target_height = 0;
-        let mut is_synced = false;
+        let mut _is_synced = false;
 
         for line in metrics.lines() {
             if line.starts_with('#') || line.is_empty() {
@@ -64,19 +64,17 @@ impl DarkMatterIntegration {
             }
             
             // Parse key metrics
-            if line.contains("zebra_state_best_block_height") {
+            // Parse key metrics
+            if line.contains("zcash_chain_verified_block_height") {
                 if let Some(value) = extract_value(line) {
                     best_height = value as u64;
                 }
-            } else if line.contains("zebra_network_peer_connections") {
+            } else if line.contains("zcash_net_peers") && !line.contains("_connected") {
+                // "zcash_net_peers 12" is the summary gauge
                 if let Some(value) = extract_value(line) {
                     status.peers = Some(value as u32);
                 }
-            } else if line.contains("zebra_sync_is_synced") {
-                if let Some(value) = extract_value(line) {
-                    is_synced = value > 0.0;
-                }
-            } else if line.contains("zebra_sync_target_block_height") {
+            } else if line.contains("sync_estimated_network_tip_height") {
                 if let Some(value) = extract_value(line) {
                     target_height = value as u64;
                 }
@@ -84,9 +82,32 @@ impl DarkMatterIntegration {
         }
         
         status.block_height = Some(best_height);
-        // If Zebra says it's synced via its internal metric, trust it.
-        // Otherwise, compare heights if we have a target.
-        status.synced = is_synced || (target_height > 0 && best_height >= target_height);
+        
+        // Calculate Sync Percentage and State
+        if target_height > 0 {
+            if best_height >= target_height {
+                status.synced = true;
+                status.sync_percentage = Some(100.0);
+                status.sync_state = Some("Fully Synced".to_string());
+            } else {
+                status.synced = false;
+                let pct = (best_height as f64 / target_height as f64) * 100.0;
+                status.sync_percentage = Some(pct as f32);
+                
+                // Heuristic for state
+                if best_height > 0 {
+                    status.sync_state = Some("Downloading Blocks".to_string());
+                } else {
+                    status.sync_state = Some("Starting Up".to_string());
+                }
+            }
+        } else if best_height > 0 {
+             // If we have height but no target, assume synced or check verify
+             status.synced = true; 
+             status.sync_percentage = Some(100.0);
+             status.sync_state = Some("Verifying Checkpoints".to_string());
+        }
+
         status.version = Some("Zebra (Zcash)".to_string());
         
         debug!("Parsed Zebra metrics: height={}, peers={:?}, synced={}", 

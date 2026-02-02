@@ -1,0 +1,9 @@
+[package]
+name = "arch-explorer"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+tracing = "0.1"
+astrometrics-core = { path = "../../modules/astrometrics-core" }

@@ -30,6 +30,8 @@ pub struct NodeStatus {
     pub block_height: Option<u64>,
     pub peers: Option<u32>,
     pub version: Option<String>,
+    pub sync_percentage: Option<f32>,
+    pub sync_state: Option<String>,
 }
 
 impl Default for NodeStatus {
@@ -40,6 +42,8 @@ impl Default for NodeStatus {
             block_height: None,
             peers: None,
             version: None,
+            sync_percentage: None,
+            sync_state: None,
         }
     }
 }
