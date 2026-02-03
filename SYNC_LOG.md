@@ -415,4 +415,71 @@
 
 **Zebra Status**: Running clearnet mode (~20h), sync at ~1 blk/sec (glacially slow). See `darkmatter/zcash/GET_WELL_PLAN.md` for remediation.
 
+### [2026-02-02] 16:30 - Zcash Z3 Stack Integration (Stalled)
+- **Objective**: Integrate **Zaino** (Indexer) and **Zallet** (Wallet) with **Zebra** (Node).
+- **Status**: **FAILED**. Stack is unstable.
+- **Components**:
+  - **Zebra (Node)**:
+    - **Status**: Stable when run manually (`scripts/start.sh`).
+    - **Issue**: Crashes/Exits when orchestrated via `start-stack.sh`. Suspect signal handling or script exit behavior killing child processes.
+    - **Metrics**: Changed keys in recent version (`sync_estimated_network_tip_height`), breaking Zwatcher.
+  - **Zaino (Indexer)**:
+    - **Status**: Functional but fragile.
+    - **Issue**: Extremely sensitive to Zebra availability. Crashes instantly if Zebra RPC (8232) is not ready. Added `sleep 20` to script, but orchestration failures kill it.
+  - **Zallet (Wallet)**:
+    - **Status**: **Failing Initialization**.
+    - **Error**: `os error 2` (No such file or directory) consistently on startup.
+    - **Diagnosis**: 
+      - Missing `~/.zallet` directory (Fixed).
+      - Missing `~/.zallet/encryption-identity.txt` (Fixed/Generated).
+      - Config `wallet.db` path issues (Fixed to absolute).
+      - **Current State**: Still failing with `os error 2` despite these fixes. Potential binary capability issue or hardcoded expectation.
+  - **Zwatcher (UI)**:
+    - **Status**: Regressed.
+    - **Issue**: Sync percentage shows 0% or incorrect data because Zebra metric keys changed.
+    - **Fix Attempted**: Updated `metrics.rs` to parse `state_memory_best_committed_block_height`. Needs verification.
+
+- **Artifacts**:
+  - `scripts/start-stack.sh`: Orchestrator (needs debugging).
+  - `scripts/run_zallet.sh`: Launcher (fixed variables).
+  - `config/zallet.toml`: Generated and modified config.
+  - `~/.zallet/`: created identity file here.
+
+- **Handover to Claude Opus 4.5**:
+  - Please debug the `start-stack.sh` orchestration (why does it kill Zebra?).
+  - Investigate Zallet `os error 2` (check `fs_usage` or `dtruss`?).
+  - Verify Zwatcher metrics.
+
+### [2026-02-02] 17:34 - Z3 Stack Orchestration Fixes (Claude Opus 4.5)
+- **Objective**: Fix the Z3 stack orchestration issues identified by Gemini Pro.
+- **Status**: ✅ **COMPLETE** - All fixes implemented, pending user verification.
+
+- **Root Cause Analysis**:
+  1. **Process Orphaning**: Scripts used `&` without `nohup`/`disown` - child processes received SIGHUP when parent script exited.
+  2. **Misdiagnosis**: The Zallet "os error 2" was actually a Zebra RPC connection timeout, not a filesystem issue. Zallet initialized successfully but couldn't connect to Zebra.
+  3. **Metric Regression**: Zwatcher lacked `target_height` field needed for sync percentage calculation.
+
+- **Fixes Applied**:
+  - **`scripts/start-stack.sh`**:
+    - Added `nohup`/`disown` for proper process daemonization.
+    - Implemented RPC polling loop (`wait_for_zebra_rpc()`) with 60 attempts × 2s timeout.
+    - Processes now survive script exit.
+  - **`scripts/run_zaino.sh`**:
+    - Standardized logging with absolute paths.
+    - Uses `LOG_DIR` and `LOG_FILE` variables consistently.
+  - **`scripts/run_zallet.sh`**:
+    - Absolute paths for binary, config, and logs.
+    - Added binary existence verification.
+  - **`zwatcher/src/data/metrics.rs`**:
+    - Added `target_height: Option<u64>` field to `ZebraMetrics` struct.
+    - Added parsing for `sync_estimated_network_tip_height` metric.
+    - Zwatcher rebuilt successfully.
+
+- **Documentation**:
+  - Created comprehensive `GET_WELL_PLAN.md` with root cause analysis, phased remediation plan, and verification checklist.
+
+- **Next Steps**:
+  - User to run `./scripts/start-stack.sh --clearnet` and verify all three components stay running.
+  - Verify Zwatcher displays correct sync percentage.
+
 ---
