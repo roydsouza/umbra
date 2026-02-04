@@ -7,3 +7,6 @@ etc/
 PROMPTS.md
 torrc
 !etc/arti.toml
+
+# Large Files
+*.pcap
