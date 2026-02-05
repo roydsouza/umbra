@@ -1,0 +1,21 @@
+[application]
+watch_configuration = true
+
+[proxy]
+socks_listen = 9059
+
+[logging]
+console = "info"
+# files = [
+#          {path = "/Users/rds/antigravity/umbra/var/log/arti.log", filter="info", rotate="daily"},
+# ]
+
+[path_rules]
+ipv4_subnet_family_prefix = 16
+ipv6_subnet_family_prefix = 32
+
+[bridges]
+enabled = false
+
+[tor_network]
+# End of file
