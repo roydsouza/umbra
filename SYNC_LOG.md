@@ -518,3 +518,9 @@
   - **Result**: Full log visibility restored. The "Ghost Config" error persists in the log but is confirmed harmless (proxy bootstraps and routes traffic 100% correctly).
   - **Artifacts**: Logged as a known issue in `DEFECTS.md`.
 - **Action**: Performed global recursive checkpoint.
+
+### [2026-02-04] - Arti Ghost Config Error RESOLVED
+- **Root Cause**: Arti's `watch_configuration = true` triggers a reload that looks for `~/antigravity/umbra/arti.toml` (Arti's default path). We only had `etc/arti.toml`.
+- **Fix**: Created symlink `umbra/arti.toml` -> `umbra/etc/arti.toml`.
+- **Verification**: Arti now starts cleanly without the "File not found" error.
+- **Action**: Updated `DEFECTS.md` and committed fix.
