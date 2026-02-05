@@ -2,7 +2,7 @@
 watch_configuration = true
 
 [proxy]
-socks_listen = 9059
+socks_listen = 9050
 
 [logging]
 console = "info"
