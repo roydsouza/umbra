@@ -509,3 +509,12 @@
 - Modified: arti-upstream
 - Modified: guardian
 - Modified: penumbra
+
+### [2026-02-04] - Arti Logging Restoration
+- **Defect Resolution (Logging)**:
+  - **Issue**: `arti.log` was persistently empty, and startup reported "File not found" for `${HOME}/antigravity/umbra/arti.toml`.
+  - **Diagnosis**: The phantom path error (likely an environmental artifact in `start-arti`) prevents the internal *file* logger from initializing.
+  - **Fix**: Enabled `console = "info"` in `etc/arti.toml` and updated `start-arti` to capture standard error to `var/log/arti.err.log`.
+  - **Result**: Full log visibility restored. The "Ghost Config" error persists in the log but is confirmed harmless (proxy bootstraps and routes traffic 100% correctly).
+  - **Artifacts**: Logged as a known issue in `DEFECTS.md`.
+- **Action**: Performed global recursive checkpoint.
