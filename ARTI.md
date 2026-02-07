@@ -5,7 +5,7 @@ This document defines the operational procedures for the **Arti** (Rust Tor) imp
 > [!IMPORTANT]
 > **Station Standard**: Arti is the **primary and only** Tor implementation used by Umbra.
 > - **Port**: **9050** (SOCKS5 proxy) - *Note: Changed from 9150 to match standard Tor ports.*
-> - **Config**: `~/antigravity/umbra/arti.toml`
+> - **Config**: `~/antigravity/umbra/etc/arti.toml`
 > - **Service**: `org.torproject.arti` (macOS LaunchAgent)
 
 ## Quick Reference
@@ -13,7 +13,7 @@ This document defines the operational procedures for the **Arti** (Rust Tor) imp
 | Resource | Path/Command |
 | :--- | :--- |
 | **Binary** | `~/antigravity/umbra/bin/arti` |
-| **Configuration** | `~/antigravity/umbra/arti.toml` |
+| **Configuration** | `~/antigravity/umbra/etc/arti.toml` |
 | **Log File** | `~/antigravity/umbra/var/log/arti.log` |
 | **Port Check** | `lsof -iTCP -sTCP:LISTEN -P | grep 9050` |
 | **Service Status** | `launchctl list | grep arti` |
@@ -139,7 +139,7 @@ If Arti fails to start or connect:
    Stop the service and run manually to see debug output:
    ```bash
    launchctl stop org.torproject.arti
-   ~/antigravity/umbra/bin/arti -c ~/antigravity/umbra/arti.toml proxy -l debug
+   ~/antigravity/umbra/bin/arti -c ~/antigravity/umbra/etc/arti.toml proxy -l debug
    ```
 3. **Common Issues**:
    - **Port Conflict**: Ensure no other Tor instance is on port 9150.
@@ -153,7 +153,7 @@ If Arti fails to start or connect:
 To configure a Hidden Service (Onion Service):
 
 1. **Edit Configuration**:
-   Open `~/antigravity/umbra/arti.toml`:
+   Open `~/antigravity/umbra/etc/arti.toml`:
    ```toml
    [onion_services."my-service"]
    # Map local port 80 to web server
@@ -189,6 +189,6 @@ Arti is configured to be **"Always On"** and self-healing.
 - **Behavior**: Monitors connectivity to the proxy port. If unresponsive, it can trigger alerts or attempt operational fixes (though LaunchAgent handles the process restart).
 
 ### Layer 3: Configuration Hardening
-- **Config**: `umbra/arti.toml`
+- **Config**: `umbra/etc/arti.toml`
 - **Paths**: Uses absolute paths for logs and state to prevent CWD-dependent failures.
 - **Socks**: Binds to `127.0.0.1` to prevent external network leaks.

@@ -95,4 +95,4 @@ This station serves as a personal infrastructure for decentralized finance resil
 ## 6. Archived Content
 
 All legacy documentation and deprecated tools are preserved in `legacy/`:
-- C-Tor docs, old service configs, mkp224o, awatcher, onion-services.
+- C-Tor docs, mkp224o, awatcher, onion-services.

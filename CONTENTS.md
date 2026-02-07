@@ -12,9 +12,10 @@ This file provides an alphabetical index of the documentation and configuration 
 
 ### 📄 Documentation (Markdown)
 
-- [`ARTI.md`](ARTI.md): Comprehensive guide for the Rust-based Tor implementation. Includes build instructions, network ports, programmatic usage examples, and logging details.
-- [`C-TOR.md`](C-TOR.md): Detailed documentation for the legacy C-based Tor installation. Covers the custom build prefix, key archiving, and coexistence with Arti.
-- [`CONTENTS.md`](CONTENTS.md): *You are here.* An alphabetical map of the project's meta-documentation and configuration layers.
+- [`ARTI.md`](ARTI.md): Comprehensive guide for the Rust-based Tor implementation.
+- [`C-TOR.md`](legacy/C-TOR.md): Legacy documentation for C-based Tor (Archived).
+- [`CONTENTS.md`](CONTENTS.md): *You are here.* An alphabetical map of the project.
+- [`FOLDER_HIERARCHY.md`](FOLDER_HIERARCHY.md): Visual map of the workspace structure.
 - [`CONTEXT.md`](CONTEXT.md): Provides relevant background information, history, and dependencies for this project.
 - [`INSTRUCTIONS.md`](INSTRUCTIONS.md): Detailed instructions on how to set up, build, run, and use this project.
 - [`keys/README.md`](keys/README.md): Security documentation for the ignored identities and keys directory.

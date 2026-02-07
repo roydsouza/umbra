@@ -1,6 +1,26 @@
 # Umbra Project Sync Log
 
-### [2026-01-29] 09:55 - awatcher Phase 6 Complete
+### [2026-02-06] 18:56 - Arti CGO Verification & Documentation Overhaul
+- **CGO Verification**:
+  - Confirmed CGO (Counter Galois Onion) is compiled into Arti binary via `nm` symbol analysis.
+  - Fixed `build-arti` script bug: was missing `-p arti` flag when applying features.
+  - Rebuilt Arti with `full` profile (CGO + OBFS4 pluggable transports).
+- **Profiles & Monitoring**:
+  - Created `paranoid` profile for CGO-strict mode (hard fails without CGO relays).
+  - Created `bin/check-cgo-adoption` script to monitor network CGO adoption.
+  - Created launchd plist for weekly CGO adoption alerts (target: 50%).
+- **Documentation Overhaul**:
+  - Created `STATUS.md` with prepending status report workflow.
+  - Rewrote `DEFECTS.md` and `TASKS.md` with humor and educational context.
+  - Created `OBFS4.md` documentation for censorship circumvention.
+  - Created `/status-report` workflow for generating status reports.
+- **Infrastructure**:
+  - Enabled log rotation in `etc/arti.toml` (daily rotation, console reduced to warn).
+  - Updated `arti-profiles.toml` with paranoid and obfs4 profiles.
+- **Action**: Performed checkpoint.
+
+---
+
 - **awatcher TUI**: Completed all 6 phases of the Arti monitoring TUI.
   - Core shell, Arti process monitoring, log viewer with IP scrubbing, onion services, dependent apps detection, actions/control.
   - Fixed notification UI sizing and color scheme (TOKYO_ORANGE instead of red).

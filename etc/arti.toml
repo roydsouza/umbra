@@ -5,10 +5,10 @@ watch_configuration = true
 socks_listen = 9050
 
 [logging]
-console = "info"
-# files = [
-#          {path = "/Users/rds/antigravity/umbra/var/log/arti.log", filter="info", rotate="daily"},
-# ]
+console = "warn"
+files = [
+    {path = "/Users/rds/antigravity/umbra/var/log/arti.log", filter = "info", rotate = "daily"},
+]
 
 [path_rules]
 ipv4_subnet_family_prefix = 16

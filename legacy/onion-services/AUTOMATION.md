@@ -7,7 +7,7 @@ This document allows AntiGravity to automatically provision new Onion Services b
 When a user asks to "add an onion service" or "expose X via Tor":
 
 1.  **Identify the Service**: Determine the local port and the desired service name.
-2.  **Edit `arti.toml`**: Add the service configuration to `/Users/rds/antigravity/umbra/arti.toml`.
+2.  **Edit `arti.toml`**: Add the service configuration to `/Users/rds/antigravity/umbra/etc/arti.toml`.
 
 ### Configuration Format
 
