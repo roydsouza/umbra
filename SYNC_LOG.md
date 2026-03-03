@@ -1,5 +1,17 @@
 # Umbra Project Sync Log
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
+### [2026-03-02] - Penumbra Module 18 (Decoupling & Similarity Search)
+- **Project Penumbra**:
+  - Fully decoupled the database interaction layer from `BeliefEngine` into a dedicated `SubstrateRepository`.
+  - Implemented vector similarity search via `pgvector` native cosine distance `<=>` operator.
+  - Successfully achieved 100% test passing rate across the global regression suite.
+  - Restarted active `arti` and `penumbra-bridge` background processes via `launchctl`.
+- **Action**: Performed global station checkpoint.
+
 ### [2026-02-06] 18:56 - Arti CGO Verification & Documentation Overhaul
 - **CGO Verification**:
   - Confirmed CGO (Counter Galois Onion) is compiled into Arti binary via `nm` symbol analysis.
@@ -544,3 +556,13 @@
 - **Fix**: Created symlink `umbra/arti.toml` -> `umbra/etc/arti.toml`.
 - **Verification**: Arti now starts cleanly without the "File not found" error.
 - **Action**: Updated `DEFECTS.md` and committed fix.
+### [2026-02-13] - Penumbra Status & Resilience
+- **Status Enhancement**:
+  - Added `zallet` and `zaino` to the `/status` report.
+  - Implemented smart detection for "Scheduled Tasks" (e.g., Heartbeat) vs "Daemons" (e.g., Bridge).
+  - Status report now shows "Last Run: [Time]" for scheduled tasks instead of "Stopped".
+- **Resilience**:
+  - Removed `monero` from Penumbra status (deprecated).
+  - Fixed `bridge` crash loop by installing `python-dotenv` for auto-credential loading.
+  - Resolved `Conflict: terminated by other getUpdates request` by killing stale bridge processes.
+- **Action**: Performed global station checkpoint.
