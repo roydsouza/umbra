@@ -595,3 +595,8 @@
   - Refactored `GeminiAnalyzer` and `SynthesisAgent` to generate cognitive pipelines via topological DAG composition.
   - Ran full 687-test regression suite to mathematically verify backwards compatibility of the generated prompts.
 - **Action**: Performed global station checkpoint.
+
+## 2026-03-08: Penumbra Module 21.8 Synchronization
+- **Target:** Transport Integration Consolidation
+- **Action:** Standardized fallback_transport nomenclature across manager.py, bridge.py, heartbeat.py, and test mocks.
+- **Status:** 689 regression tests passed. Old CommsRouter ghost variables purged.
