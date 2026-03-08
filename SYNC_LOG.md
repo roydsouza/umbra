@@ -577,3 +577,12 @@
   - Repaired explicit and fragile mock schemas across the unit test suite (test_heartbeat.py, test_mcp_server.py, test_dispatcher.py).
   - Achieved a stable 100% Pass Rate spanning 689 explicit unit tests.
 - **Action**: Performed global station checkpoint.
+
+### [2026-03-08] - Penumbra Module 20.5: Self-Healing Routines
+- **Project Penumbra**:
+  - **Module 20.5**: Implemented proactive `Self-Healing Routines` inside the Sentinel ingestion pipeline.
+  - Added stateful degradation tracking (`_source_failures`) to catch consecutive HTTP/Socks5 timeouts over Tor and proxy feeds.
+  - Upon reaching the critical threshold (3 failures), the Sentinel now automatically escorts a `service.failed` Event directly to the `HealerAgent`.
+  - The `HealerAgent` resolves the degraded pipeline by force-restarting the target dependency (`arti` or `network`).
+  - Deployed `tests/test_sentinel_healing.py` to cryptographically assert EventBus execution flows.
+- **Action**: Performed global station checkpoint.
