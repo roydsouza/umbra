@@ -586,3 +586,12 @@
   - The `HealerAgent` resolves the degraded pipeline by force-restarting the target dependency (`arti` or `network`).
   - Deployed `tests/test_sentinel_healing.py` to cryptographically assert EventBus execution flows.
 - **Action**: Performed global station checkpoint.
+
+### [2026-03-08] - Penumbra Module 20.6: Dynamic Prompter (Composable DAGs)
+- **Project Penumbra**:
+  - **Module 20.6**: Evolved LLM prompt generation from rigid f-strings into a dynamic, `PromptDAG` system.
+  - Designed `PromptNode` interfaces (`SystemInstructionNode`, `ContextInjectionNode`, `SchemaNode`).
+  - Implemented automatic JSON Schema resolution via Pydantic introspection inside `SchemaNode`.
+  - Refactored `GeminiAnalyzer` and `SynthesisAgent` to generate cognitive pipelines via topological DAG composition.
+  - Ran full 687-test regression suite to mathematically verify backwards compatibility of the generated prompts.
+- **Action**: Performed global station checkpoint.
