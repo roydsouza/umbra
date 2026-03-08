@@ -1,5 +1,9 @@
 # MissionControl: Security Posture & Threat Mitigation
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This document outlines the security strategy for the MissionControl Onion Service, focusing on proactive defense against common attacks and preventing accidental information leakage.
 
 ## 1. Core Security Principles

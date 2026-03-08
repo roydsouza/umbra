@@ -1,5 +1,9 @@
 # C-Tor (Legacy Core) - [DECOMMISSIONED]
 
+
+**[📍 Back to Map](../CONTENTS.md)**
+
+
 > [!WARNING]
 > This implementation has been officially decommissioned as of 2026-01-21. 
 > The project has standardized exclusively on **Arti** (Rust). 

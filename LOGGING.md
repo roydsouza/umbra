@@ -1,5 +1,8 @@
 # Umbra Logging Architecture
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This document clarifies the various log files you may encounter in `umbra/var/log/`.
 
 ## 1. The Canonical Log (Trust This One)

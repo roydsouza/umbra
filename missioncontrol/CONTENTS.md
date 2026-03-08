@@ -1,11 +1,17 @@
 # MissionControl: Directory Contents
 
+**[⬅️ Back to Parent](../CONTENTS.md)**
+
+
+
+
+
 ## 📖 Core Documentation
 | File | Description |
 |:---|:---|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | **Canonical technical reference** — Tauri structure, integrations, IPC commands. |
 | [MISSION.md](MISSION.md) | Vision, purpose, and core directives. |
-| [README.md](README.md) | High-level overview and integrated services. |
+| [README.md](/CONTENTS.md) | High-level overview and integrated services. |
 | [SECURITY.md](SECURITY.md) | Security posture, threat mitigations, secrets policy. |
 
 ## 📋 Project State

@@ -1,5 +1,8 @@
 # awatcher
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 Always-on monitoring and control TUI for Arti and the Umbra privacy layer.
 
 ## Status

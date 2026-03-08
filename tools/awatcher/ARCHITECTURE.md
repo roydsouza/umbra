@@ -1,5 +1,8 @@
 # Architecture
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 `awatcher` is a **Rust-native Terminal User Interface (TUI)** that provides real-time observability and control for Arti and the Umbra privacy layer.
 
 ## Technology Stack

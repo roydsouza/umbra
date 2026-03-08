@@ -1,5 +1,8 @@
 # Defects - awatcher
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 ## Open
 
 ### [DEFECT-002] Persistent Log Errors in Display

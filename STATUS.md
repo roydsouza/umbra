@@ -1,5 +1,8 @@
 # Umbra Status Reports
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > **Mission Control**: This file tracks the operational health of Umbra's Tor infrastructure.
 > New reports are prepended to the top. Scroll down for history!
 
@@ -224,4 +227,3 @@ The logs revealed some interesting moments. Here's what the onion router whisper
 ---
 
 *Report generated with love and a mild obsession with onion metaphors.*
-

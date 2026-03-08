@@ -1,5 +1,9 @@
 # Project Umbra: Secure & Private Communication Layer
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 Instructions for Antigravity, Gemini, and other models: please also see CGO_NOTES.md for the Arti/CGO mission.
 
 ## 1. Vision & Purpose
@@ -44,4 +48,3 @@ The agent is responsible for maintaining project state across three mandatory fi
 - Do not attempt to write outside the `~/antigravity/umbra/` hierarchy without explicit user confirmation.
 - Respect `.antigravityignore` to shield sensitive key backups.
 - Always provide a "Plan Artifact" before executing complex build sequences involving cross-compilation or optimization flags.
-

@@ -1,5 +1,9 @@
 # Context: MissionControl
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This project, MissionControl, originates from the need for a secure, high-performance "command center" for the user's "EventHorizon" ecosystem. The primary motivation is to enable remote interaction with personal services (like DeFi metric tracking and system status monitoring) without compromising on privacy or anonymity.
 
 ## Technical Context

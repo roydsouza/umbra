@@ -1,5 +1,12 @@
 # 🌑 Umbra: The Station's Cloaking Device
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
+
+**[📍 Back to Map](../CONTENTS.md)**
+
+
 **The dedicated privacy and anonymity subsystem for the Antigravity ecosystem.**
 
 Umbra is the "Shadow Layer" of the station. Its mission is simple: make sure no one can see what we're doing. It provides metadata resistance and identity obfuscation for all station projects, ensuring that our presence on the decentralized frontier is felt, but never seen.
@@ -15,14 +22,7 @@ We are transitioning the station's cloak from legacy tech to the future:
 - **Phase 3 (Migration):** Full decommission of legacy Tor in favor of a 100% Rust-powered cloak.
 
 ## 📂 The Cloak's Components
-
-- **`missioncontrol/`**: The administration deck. Our high-level interface for managing hidden services and privacy parameters.
-- **`penumbra/`**: The DNS Privacy subsystem. Intercepts and tunnels all DNS traffic through Arti.
-- **`arti/`**: The Arti source and build environment (Git Submodule).
-- **`tor/`**: The legacy C-Tor source (Git Submodule).
-- **`keys/`**: The Station's heart. Contains our private identities (**Strictly Confidential**).
-- **`ARTI.md`**: Tactical manual for the Arti implementation.
-- **`arti.toml`**: The master configuration for our anonymous traffic.
+**See [CONTENTS.md](CONTENTS.md) for the detailed file manifest.**
 
 ---
 

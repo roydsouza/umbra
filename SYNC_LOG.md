@@ -1,10 +1,12 @@
-# Umbra Project Sync Log
+### [2026-03-02] - Penumbra Module 19 (Gap Closure & Extended Resilience)
+- **Project Penumbra**:
+  - Implemented `tests/test_repository_integrity.py` (idempotency, vector boundaries).
+  - Implemented `tests/test_coordinator_robustness.py` (batching load, circuit breaker, scratchpad pruning).
+  - Implemented `tests/test_service_resilience.py` (regex safety, freshness buffers).
+  - All 10 new regression tests passing (100% success).
+  - Updated `TASKS.md` and generated `walkthrough.md`.
 
 
-**[📍 Back to Map](CONTENTS.md)**
-
-
-### [2026-03-02] - Penumbra Module 18 (Decoupling & Similarity Search)
 - **Project Penumbra**:
   - Fully decoupled the database interaction layer from `BeliefEngine` into a dedicated `SubstrateRepository`.
   - Implemented vector similarity search via `pgvector` native cosine distance `<=>` operator.
@@ -565,4 +567,13 @@
   - Removed `monero` from Penumbra status (deprecated).
   - Fixed `bridge` crash loop by installing `python-dotenv` for auto-credential loading.
   - Resolved `Conflict: terminated by other getUpdates request` by killing stale bridge processes.
+- **Action**: Performed global station checkpoint.
+
+### [2026-03-08] - Penumbra Substrate & Transport Upgrades
+- **Project Penumbra**:
+  - **Module 20.4**: Enabled Substrate-Aware Sentinel by injecting BeliefEngine. The Sentinel now performs hybrid_search on incoming news, appending high-confidence Substrate context (score >= 0.5) to the RawSignal prompt before LLM analysis to minimize hallucinations.
+  - **Module 21.8**: Consolidated transport architecture by fully deprecating comms.py and its legacy FileChannel.
+  - Migrated bridging, dispatch, and MCP Server logic strictly to TransportManager and Native Protocol Transports (FileTransport, SlackTransport, TelegramTransport).
+  - Repaired explicit and fragile mock schemas across the unit test suite (test_heartbeat.py, test_mcp_server.py, test_dispatcher.py).
+  - Achieved a stable 100% Pass Rate spanning 689 explicit unit tests.
 - **Action**: Performed global station checkpoint.

@@ -1,5 +1,9 @@
 # Umbra Directory Hierarchy
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This document maps the physical structure of the `umbra` workspace, designed for modular Rust development and rapid experimentation.
 
 ## Top-Level Structure

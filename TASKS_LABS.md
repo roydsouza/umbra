@@ -1,5 +1,8 @@
 # Ergosphere Lab: Experimental Tasks
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > **Lab Focus**: Arti internals research, CGO protocol development, and bleeding-edge experiments.
 
 ---

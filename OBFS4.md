@@ -1,5 +1,8 @@
 # OBFS4 — Traffic Obfuscation Guide
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > **When to use**: Only when connecting from networks that actively block Tor.
 > **Current status**: Compiled in, disabled by default.
 

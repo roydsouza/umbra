@@ -1,5 +1,12 @@
 # MissionControl: Onion-Routed Command Interface
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
+
+**[📍 Back to Map](../CONTENTS.md)**
+
+
 MissionControl is a resilient, high-performance command center for the EventHorizon ecosystem. It provides a secure and private dashboard accessible via a Tor Onion Service, unifying monitoring and control of the Umbra ecosystem.
 
 ## Core Features

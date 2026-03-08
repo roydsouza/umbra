@@ -1,5 +1,8 @@
 # awatcher Implementation Prompt for Gemini
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > **Purpose**: This document provides structured prompts for delegating the implementation of `awatcher` to Gemini 3 Pro (or equivalent LLM).  
 > **Approach**: Phase-by-phase implementation with review checkpoints.  
 > **Last Updated**: 2026-01-29

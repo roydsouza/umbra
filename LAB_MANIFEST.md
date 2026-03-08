@@ -1,5 +1,8 @@
 # Ergosphere Lab Manifest
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 **The research lab for Arti and CGO (Counter Galois Onion).**
 
 ---

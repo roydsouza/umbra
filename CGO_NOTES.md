@@ -1,5 +1,8 @@
 # Mission - Optimizing Privacy with Arti CGO
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This document captures intent and an outline, and will aggregate thoughts and status as we learn more about CGO, experiment with it, and leverage it more proactively.
 
 As of early 2026, **Counter Galois Onion (CGO)** has transitioned from a theoretical research paper to the active "bleeding edge" of the Tor ecosystem. With the release of **Arti 1.9.0** in January, CGO is the flagship cryptographic upgrade currently being integrated into the Rust codebase.
@@ -474,5 +477,4 @@ The **Apple MacBook Pro (M5)** is exceptionally well-suited for this. Its dedica
 To ensure your pings aren't skewed by local Wi-Fi congestion, the **ASUS RT-AX88U Pro** provides a stable, low-jitter environment. Its quad-core processor and gaming-grade QoS can be configured to prioritize your M5's Tor traffic, giving you a true measurement of the Tor network's latency rather than your home network's noise.
 
 **Would you like me to help you refine the "re-pinning" logic so it only swaps out the single slowest relay in your `configs/networking.toml` rather than regenerating the entire list?**
-
 

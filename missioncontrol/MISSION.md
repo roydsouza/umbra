@@ -1,5 +1,9 @@
 # MISSION: MissionControl
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 ## 1. Vision & Purpose
 MissionControl is a resilient, high-performance "Router" interface for the EventHorizon ecosystem. Its purpose is to provide a secure, private, and interactive "command center" accessible via a Tor Onion Service. This allows the user to interact with their ecosystem (viewing DeFi metrics, system status, secure notes) from any device, anywhere, with maximum anonymity.
 

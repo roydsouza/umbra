@@ -1,5 +1,8 @@
 # Umbra: Stable Defects
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > **The Bug Zoo** 🐛 — Where we keep our digital gremlins under observation.
 > 
 > *"A bug in the hand is worth two in production."* — Ancient Developer Proverb

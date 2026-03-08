@@ -1,5 +1,9 @@
 # MissionControl Architecture
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This document describes the **current** technical architecture of MissionControl, the unified command center for the Umbra ecosystem. It serves as the canonical reference for design and implementation.
 
 > [!IMPORTANT]

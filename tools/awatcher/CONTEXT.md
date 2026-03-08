@@ -1,5 +1,8 @@
 # Context
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 - **Subsystem**: Umbra (Privacy Layer)
 - **Role**: Arti Observability & Control
 - **Always-On**: Foreground TUI (daemon mode planned)

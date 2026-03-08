@@ -1,5 +1,9 @@
 # Tasks: MissionControl
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > [!IMPORTANT]
 > For architecture details and integration specs, see [ARCHITECTURE.md](ARCHITECTURE.md).
 

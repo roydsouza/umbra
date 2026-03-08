@@ -1,5 +1,9 @@
 # MissionControl Sync Log
 
+
+**[📍 Back to Map](CONTENTS.md)**
+
+
 This log maintains the context of automated work performed within the `missioncontrol` directory.
 
 ---

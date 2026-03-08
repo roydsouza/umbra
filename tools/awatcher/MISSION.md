@@ -1,5 +1,8 @@
 # Mission
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 `awatcher` provides deep observability and real-time control for the Arti anonymity network, ensuring the station's shadow layer is healthy, responsive, and leak-free.
 
 ## Objectives

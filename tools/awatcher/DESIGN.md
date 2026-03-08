@@ -1,5 +1,8 @@
 # awatcher Design Document
 
+**[📍 Back to Map](CONTENTS.md)**
+
+
 > **Version**: 1.0  
 > **Status**: Architecture & Design (Pre-Implementation)  
 > **Last Updated**: 2026-01-29  
