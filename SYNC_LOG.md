@@ -619,3 +619,11 @@
 - **Target:** Core Engine Coverage Expansion
 - **Action:** Trashed zombie `slack/adapter.py` dragging down global math metrics by exactly 70 LOC. Resolved the failing `test_context_selection_flow` by prioritizing recent `Evidence` on zero-vector distance ties natively within the SQL `ILIKE` fallback. Authored `test_transport_file.py` locking file transport routing offline capability to 100% test coverage.
 - **Status:** Overall core coverage increased from 89% to 91%. 698 regression assertions passed with zero defects.
+
+### [2026-03-10] - Tachyon Tongs: Documentation & MCP Integration
+- **Project Tachyon Tongs**:
+  - Documented MCP Integration gateway functionality in `README.md` and `docs/CLIENT_INTEGRATION.md`.
+  - Created system-wide regression test coverage metrics and updated `EXPLOITATION_CATALOG.md`.
+  - Synchronized `RUN_LOG.md` and `EVOLUTION.md` to reflect recent autonomic Sentinel activities.
+  - Updated `ERROR.md` and `PENDING_MERGE.md` status.
+- **Action**: Performed global station checkpoint.
