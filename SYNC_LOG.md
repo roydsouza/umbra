@@ -1,4 +1,24 @@
-### [2026-03-02] - Penumbra Module 19 (Gap Closure & Extended Resilience)
+### [2026-03-22] 13:10 - Project Status Sync & Git Hygiene
+- **Git Hygiene**: Updated `.gitignore` across the workspace to exclude databases and binaries.
+- **Log Sync**: Synchronized `umbra/SYNC_LOG.md` with the main `tachyon_tongs` project status.
+- **Action**: Performed global station checkpoint.
+- **Status**: Everything pushed to origin/main.
+
+### [2026-03-21] - Phase 26/29 Transition & Signal Purification
+- **Governance**: Implemented `TASKS_GOVERNANCE.md` and `HYGIENE.md` rules.
+- **AC/DC Workflow**: Codified the Agent Centric Development Cycle.
+- **Signal Purification**: Implemented "Mutant Lock" in Engineer and Guardian layers.
+- **Action**: Performed station-wide checkpoint.
+
+### [2026-03-19] - Agent Infrastructure Consolidation
+- **Consolidation**: Unified agent directory structure under `tachyon/agents/`.
+- **Canary**: Formalized Canary agent as a first-class substrate component.
+- **Verification**: 100% regression pass on consolidated agent structures.
+
+### [2026-03-18] - Autonomic Immune Response Deployment
+- **Immune System**: Implemented `ImmuneManager` for detection-to-remediation loops.
+- **Stability**: Restored 100% regression pass after systemic import refactor.
+
 - **Project Penumbra**:
   - Implemented `tests/test_repository_integrity.py` (idempotency, vector boundaries).
   - Implemented `tests/test_coordinator_robustness.py` (batching load, circuit breaker, scratchpad pruning).

@@ -7,6 +7,18 @@ etc/
 PROMPTS.md
 torrc
 !etc/arti.toml
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
 
-# Large Files
+# Binaries and Large Files
 *.pcap
+*.dylib
+*.bin
+*.exe
+*.o
+*.a
+*.so
