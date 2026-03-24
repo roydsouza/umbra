@@ -1,3 +1,9 @@
+### [2026-03-24] 11:51 - Darwin-Godel Machine Extraction
+- **Modularity**: Extracted `darwin_godel_machine` experiment into its own standalone repository.
+- **Integration**: Re-integrated `darwin_godel_machine` as a git submodule in `tachyon_tongs`.
+- **Source**: [https://github.com/roydsouza/Darwin-Godel-Machine](https://github.com/roydsouza/Darwin-Godel-Machine)
+- **Status**: Submodule successfully initialized and tracked.
+
 ### [2026-03-22] 13:10 - Project Status Sync & Git Hygiene
 - **Git Hygiene**: Updated `.gitignore` across the workspace to exclude databases and binaries.
 - **Log Sync**: Synchronized `umbra/SYNC_LOG.md` with the main `tachyon_tongs` project status.
