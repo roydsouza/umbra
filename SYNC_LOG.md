@@ -1,3 +1,9 @@
+### [2026-03-28] 09:40 - NotebookLM MCP Integration
+- **Deployment**: Installed `notebooklm-mcp-server` via npm to resolve PATH execution errors in AntiGravity.
+- **Resilience**: Also deployed `notebooklm-mcp-cli` via `uv` for modern unified CLI access (`nlm`).
+- **Binary**: Ensured `notebooklm-mcp-server` is available in `/opt/homebrew/bin/`.
+- **Status**: Substrate-level tool parity achieved.
+
 ### [2026-03-24] 11:51 - Darwin-Godel Machine Extraction
 - **Modularity**: Extracted `darwin_godel_machine` experiment into its own standalone repository.
 - **Integration**: Re-integrated `darwin_godel_machine` as a git submodule in `tachyon_tongs`.
