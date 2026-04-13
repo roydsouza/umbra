@@ -4,6 +4,12 @@
 **[📍 Back to Map](CONTENTS.md)**
 
 
+> [!CAUTION]
+> **STATUS: DISABLED**
+> Arti has been intentionally shut down to conserve CPU capacity for AI inference and development workloads. 
+> - **Action**: `launchctl unload ~/Library/LaunchAgents/org.torproject.arti.plist`
+> - **Reason**: AI CPU/GPU hunger.
+
 This document defines the operational procedures for the **Arti** (Rust Tor) implementation within the Umbra station.
 
 > [!IMPORTANT]

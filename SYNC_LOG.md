@@ -1,3 +1,10 @@
+### [2026-04-13] 16:40 - Penumbra Hardening & Recovery
+- **Project Penumbra**:
+  - **Module 21.9**: Completed Telemetry Hierarchy Enforcement. Replaced generic `except Exception` blocks with structured `PenumbraError` subclasses.
+  - **Recovery**: Restored the repository from an accidental archive/wipe event; re-applied and verified all hardening changes.
+  - **Verification**: 47/50 core tests passed (3 environmental Postgres failures).
+- **Action**: Performed global station checkpoint.
+
 ### [2026-03-28] 09:40 - NotebookLM MCP Integration
 - **Deployment**: Installed `notebooklm-mcp-server` via npm to resolve PATH execution errors in AntiGravity.
 - **Resilience**: Also deployed `notebooklm-mcp-cli` via `uv` for modern unified CLI access (`nlm`).

@@ -11,6 +11,11 @@
 
 Umbra is the "Shadow Layer" of the station. Its mission is simple: make sure no one can see what we're doing. It provides metadata resistance and identity obfuscation for all station projects, ensuring that our presence on the decentralized frontier is felt, but never seen.
 
+> [!CAUTION]
+> **ARTI STATUS: DISABLED**
+> To prioritize CPU capacity for AI development and inference, Arti has been intentionally shut down.
+> Tor-routed traffic is currently unavailable.
+
 ---
 
 ## 🚀 The Architectural Roadmap
