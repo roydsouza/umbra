@@ -1,10 +1,12 @@
-# Umbra Status Reports
+# Umbra Project [ARCHIVED]
 
-**[📍 Back to Map](CONTENTS.md)**
+> [!CAUTION]
+> **ARCHIVED PROJECT**: As of April 13, 2026, Project Umbra has been moved to cold storage. Active development has ceased, and all background services (Arti, Guardian) have been decommissioned.
 
+## Archival Summary (2026-04-13)
+Umbra was archived to consolidate the station's security infrastructure. The Counter Galois Onion (CGO) research, MissionControl Tauri application, and the Arti/Guardian integration logic are preserved in the GitHub repository.
 
-> **Mission Control**: This file tracks the operational health of Umbra's Tor infrastructure.
-> New reports are prepended to the top. Scroll down for history!
+**GitHub Remote**: [https://github.com/roydsouza/umbra](https://github.com/roydsouza/umbra)
 
 ---
 
